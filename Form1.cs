@@ -32,7 +32,10 @@ namespace ReportUT_
         private ReportDAYs RepDAYs  = new ReportDAYs();
 
         public List<Sensor> sensors = new List<Sensor>();
-        public SensorMes Sn = new SensorMes();
+        //public SensorMes Sn = new SensorMes();
+
+        public List<SensorMes> Listsensor_Mes = new List<SensorMes>();
+   
 
         public SensorMes pSensorMes = new SensorMes();
 
@@ -181,26 +184,42 @@ namespace ReportUT_
             int prc = 0;
             Button_Exec_Report.Text = "1%";
             label_Count.Focus();
-            Task.Run(() =>
-            {
-          
-                for (int sn_n = 0; sn_n < sensors.Count; sn_n++)
-                {
-                    One_Sens_Day(ListStr, ListStr1, ListStr2, ListStr3, sensors[sn_n].Id,sn_n);
-                    D_procent = D_procent + procent;
-                     prc = (int)D_procent;
 
-                    if (onProgress != null) onProgress(prc);
-                    if (onSet_End != null) onSet_End(sn_n); 
 
-                    if (onLabelText != null)  onLabelText(sn_n+1);
- 
-                    //if (progressBar1.Value > 99) progressBar1.Value = 0;
-                    //progressBar1.Value += 5;
-                }
+            Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker_Start_Time.Value.ToString(),dateTimePicker_Stop_Time.Value.ToString());
+            #region [ Task.Run(()]
 
-            });
-             progressBar1.Value = 1;
+
+
+            //Task.Run(() =>
+            //{
+
+            //    for (int sn_n = 0; sn_n < sensors.Count; sn_n++)
+            //    {
+            //        One_Sens_Day(ListStr, ListStr1, ListStr2, ListStr3, sensors[sn_n].Id,sn_n);
+            //        D_procent = D_procent + procent;
+            //         prc = (int)D_procent;
+
+            //        if (onProgress != null) onProgress(prc);
+            //        if (onSet_End != null) onSet_End(sn_n); 
+
+            //        if (onLabelText != null)  onLabelText(sn_n+1);
+
+            //        //if (progressBar1.Value > 99) progressBar1.Value = 0;
+            //        //progressBar1.Value += 5;
+            //    }
+
+            //});
+            #endregion
+
+           //DateTime? result = Listsensor_Mes.Where(w => w.Id == 1).Select(s => s.TimeS <= DateTime.Now).;
+
+            var selectedPeople = Listsensor_Mes.Where(w => w.Id == 4).First(p => p.TimeS > dateTimePicker_Start_Time.Value &&
+            p.TimeS < dateTimePicker_Start_Time.Value.AddHours(2));
+
+            //Listsensor_Mes.Find((x => x > dateTimePicker_Start_Time.To && x > DateLastVisit))
+
+            progressBar1.Value = 1;
         }
 
 

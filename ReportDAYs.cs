@@ -138,7 +138,8 @@ namespace ReportUT_
     public class OdbcConnector
     {
 
-        private List<SensorMes> _sensorsMes;
+        private List<SensorMes> _sensorsMes = new List<SensorMes>();
+    
         List<Sensor> sensors = new List<Sensor>();
         List<string> StrListRoom = new List<string>();
 
@@ -151,7 +152,13 @@ namespace ReportUT_
         private static string SELECT_ALL_SENSORS = "SELECT  ID_SENS, SENS_NAME, SENS_TYPE FROM S_CONDITIONAL_SENSORS     order by  ID_SENS ";
         private static string SELECT_DAY_TIME = "select FIRST 1  tcon.id_sens , tcon.tcon_time,  tcon.tcon_temp,  tcon.tcon_hum,  tcon.tcon_pres from i_test_conditions tcon where  tcon.id_sens = "; //= ? and tcon.tcon_time >= ";
         private static string SELECT_TYPE_NAME_SENSORS = "SELECT SENS_NAME, SENS_TYPE FROM S_CONDITIONAL_SENSORS  WHERE ID_SENS= ";
-        private static string SELECT_ROOM_SENSORS = "SELECT ROOM_NAME FROM S_AMBIENT_MAP_ICO WHERE ROOM_ID = (SELECT MAP_ID FROM S_AMBIENT_MAP_THB WHERE THB_ID= "; 
+        private static string SELECT_ROOM_SENSORS = "SELECT ROOM_NAME FROM S_AMBIENT_MAP_ICO WHERE ROOM_ID = (SELECT MAP_ID FROM S_AMBIENT_MAP_THB WHERE THB_ID= ";
+        static string SELECT_ALL_SENSORS_MES = "select  tcon.tcon_time,  tcon.tcon_temp,  tcon.tcon_hum,  tcon.tcon_pres,  tcon.id_sens from i_test_conditions tcon where tcon.tcon_time >=";
+        //    '1.01.2022 08:59:59'  and
+       //  tcon.tcon_time <='31.12.2022 23:59:59'
+
+
+
         private static OdbcConnection connection;
         // private   OdbcConnector ODC;
 
@@ -251,9 +258,7 @@ namespace ReportUT_
             try
             {
                 OdbcCommand command = connection.CreateCommand();
-                //command.CommandText = ;
-                string S1 = "", S = "";
-               // (NumOperation == 0)
+                    string S1 = "", S = "";
 
                 { 
                 string[] words = Time1.Split(' ');
@@ -388,6 +393,54 @@ namespace ReportUT_
                 return sensors;
             }
         }
+
+        public List<SensorMes> AllSensors_Mes(string Time1, string Time2)
+        {
+            string operationMessage = "AllSensors_Mes";
+
+            try
+            {
+                this.OpenConnection();
+                OdbcCommand command = connection.CreateCommand();
+
+                string S = SELECT_ALL_SENSORS_MES  +"'" + Time1 + "'" + " and tcon.tcon_time <=" + "'" + Time2 + "'" + "   order by  tcon.tcon_time"; ;
+               // S = S + " and tcon.tcon_time >= " + "'" + Time1 + "'"
+                //    + " and tcon.tcon_time <= '" + S1
+                //    + "   order by  tcon.tcon_time";
+
+                command.CommandText = S;
+                OdbcDataReader dataReader = command.ExecuteReader();
+                _sensorsMes.Clear();
+                while (dataReader.Read())
+                {
+                    //tcon.tcon_time,  0
+                    //tcon.tcon_temp,1
+                    //tcon.tcon_hum,2
+                    //tcon.tcon_pres,3
+                    //tcon.id_sens4
+                    SensorMes sensorMes = new SensorMes();
+                    sensorMes.TimeS = Convert.ToDateTime(dataReader[0]);
+                    sensorMes.Temperature = Convert.ToInt32(dataReader[1]);
+                    sensorMes.Humidity = Convert.ToInt32(dataReader[2]);
+                    sensorMes.Pressure  = Convert.ToInt32(dataReader[3]);
+                    sensorMes.Id = Convert.ToInt32(dataReader[4]);
+                    _sensorsMes.Add(sensorMes);
+                }
+                this.CloseConnection();
+                return _sensorsMes;
+            }
+
+            catch (InvalidCastException ex)
+            {
+                this.CloseConnection();
+                Logger.GetInstanse().SetData(operationMessage, ex.Message);
+                SensorMes sensorMes = new SensorMes();
+                sensorMes.Id = -1000;
+                _sensorsMes.Add(sensorMes);
+                return _sensorsMes;
+            }
+        }
+
         public void AllSensorsRoom()
         {
             try

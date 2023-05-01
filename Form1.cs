@@ -90,6 +90,18 @@ namespace ReportUT_
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
         {
+            if (RepDAYs.BM2)
+            {
+                dateTimePicker1.Format = DateTimePickerFormat.Custom;
+                // Display the date as "Mon 27 Feb 2012".  
+                dateTimePicker1.CustomFormat = "HH:mm";
+            }
+            else
+            {
+                dateTimePicker1.CustomFormat = "yyyy MMMM HH:mm";
+            }
+                
+            
             DateTime dt = dateTimePicker1.Value;
           //  dateTimePicker1.Value = new DateTime(dt.Year, dt.Month, 1, dt.Hour, dt.Minute, dt.Second);
 
@@ -99,6 +111,8 @@ namespace ReportUT_
 
             RepDAYs.T11 = dateTimePicker1.Value.ToShortDateString();
             RepDAYs.T12 = dateTimePicker_2_Time.Value.ToString();
+
+           dateTimePicker1.Value = DateTime.Parse(RepDAYs.T11);
         }
 
 
@@ -111,10 +125,11 @@ namespace ReportUT_
         private void dateTimePicker_2_Time_ValueChanged(object sender, EventArgs e)
         {
             DateTime dt = dateTimePicker_2_Time.Value;
-            if (dt <= dateTimePicker1.Value) { dateTimePicker_2_Time.Value = dateTimePicker1.Value;  return; }
-
-         //       dateTimePicker_2_Time.Value = new DateTime(dt.Year, dt.Month, 1, dt.Hour, dt.Minute, dt.Second);
-
+            if (dt < dateTimePicker1.Value) {
+                     MessageBox.Show("начало периода  " + dateTimePicker1.Value.ToString() +
+        "\nне может превышать его окончание  " + dateTimePicker_2_Time.Value.ToString()); 
+                    dateTimePicker_2_Time.Value = dateTimePicker1.Value;
+                  return; }
 
             RepDAYs.T12 = dateTimePicker_2_Time.Value.ToString();
         }
@@ -122,15 +137,14 @@ namespace ReportUT_
         private void dateTimePicker_Start_Time_ValueChanged(object sender, EventArgs e)
         {
             DateTime dt = dateTimePicker_Start_Time.Value;
-           // dateTimePicker_Start_Time.Value = new DateTime(dt.Year, dt.Month, 1, dt.Hour, dt.Minute, dt.Second);
-            dateTimePicker1.Value = dateTimePicker_Start_Time.Value;
+            dateTimePicker1.Value = dt;//
+            dateTimePicker_Stop_Time.Value = dt;
             RepDAYs.M11 = dateTimePicker_Start_Time.Value.ToString();
         }
 
         private void dateTimePicker_Stop_Time_ValueChanged(object sender, EventArgs e)
         {
             DateTime dt = dateTimePicker_Stop_Time.Value;
-          //  dateTimePicker_Stop_Time.Value = new DateTime(dt.Year, dt.Month, 1, dt.Hour, dt.Minute, dt.Second);
             RepDAYs.M21 = dateTimePicker_Stop_Time.Value.ToString();
         }
 
@@ -147,6 +161,15 @@ namespace ReportUT_
 
         private void Button_Exec_Report_Click(object sender, EventArgs e)
         {
+            int Moun=0;
+
+            if (checkBox1.Checked)
+            {
+ Moun =  dateTimePicker_Stop_Time.Value.Month- dateTimePicker1.Value.Month;
+            if (Moun < 0) { MessageBox.Show("начальная дата  " + dateTimePicker1.Value.ToString()+
+                "\nне может превышать конечную  " + dateTimePicker_Stop_Time.Value.ToString()); return; }
+            }
+            
 
             Flag = true;
             Seril_Param();
@@ -184,7 +207,10 @@ namespace ReportUT_
             int prc = 0;
             Button_Exec_Report.Text = "%";
             label_Count.Focus();
-          Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker1.Value.AddMonths(1).ToString());
+if (Moun>0)
+                Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker1.Value.AddMonths(1).ToString());
+else
+            Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker1.Value.AddMonths(1).ToString());
    
 
             #region [ Task.Run(()]
@@ -409,7 +435,33 @@ namespace ReportUT_
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
+
             RepDAYs.BM2 = !RepDAYs.BM2;
+
+            if (RepDAYs.BM2)
+            {
+                dateTimePicker1.Format = DateTimePickerFormat.Custom;
+                // Display the date as "Mon 27 Feb 2012".  
+                dateTimePicker1.CustomFormat = "HH:mm";
+            }
+            else
+            {
+                dateTimePicker1.CustomFormat = "yyyy MMMM HH:mm";
+            }
+
+
+            DateTime dt = dateTimePicker1.Value;
+            //  dateTimePicker1.Value = new DateTime(dt.Year, dt.Month, 1, dt.Hour, dt.Minute, dt.Second);
+
+            dateTimePicker1.MaxDate = DateTime.Now;
+            dateTimePicker_2_Time.MaxDate = DateTime.Now;
+            dateTimePicker_2_Time.Value = dateTimePicker1.Value;
+
+            RepDAYs.T11 = dateTimePicker1.Value.ToShortDateString();
+            RepDAYs.T12 = dateTimePicker_2_Time.Value.ToString();
+
+            dateTimePicker1.Value = DateTime.Parse(RepDAYs.T11);
+
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)

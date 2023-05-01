@@ -160,6 +160,14 @@ namespace ReportUT_
 
 
         private static OdbcConnection connection;
+
+        //public List<SensorMes> Listsensor_Mes { get; private set; }
+        //public void Listsensor_Mes_Set (List<SensorMes> Sl )
+        //{
+        //    Listsensor_Mes = Sl;
+        //}
+
+
         // private   OdbcConnector ODC;
 
         public OdbcConnector()
@@ -251,38 +259,58 @@ namespace ReportUT_
             }
         }
 
-        //одно измерение по одному датчику 
-        public SensorMes Get_DAY_MeasurementDataIdBySensorId(int id, string Time1, string Time2,int NumOperation)
+        public SensorMes Get_DAY_MeasSensorId(List<SensorMes> Listsensor_Mes, int id, string Time1, string Time2, int NumOperation)
         {
             SensorMes element = new SensorMes();
+            element.Id = -1000;
+            DateTime D2 = DateTime.Parse(Time1).AddHours(4); 
+            //D2.AddHours(1);
+            try
+            {
+                element = new SensorMes();
+                element = Listsensor_Mes.Where(w => w.Id == id).FirstOrDefault(p => p.TimeS > DateTime.Parse(Time1)
+                &&                             p.TimeS < D2);
+                return element;
+            }
+            catch
+            {
+                return element;
+            }
+
+        }
+
+            //одно измерение по одному датчику 
+            public SensorMes Get_DAY_MeasurementDataIdBySensorId(int id, string Time1, string Time2,int NumOperation)
+        {
+            SensorMes element = new SensorMes();
+            element.Id = -1000;
+            #region [1]
             try
             {
                 OdbcCommand command = connection.CreateCommand();
-                    string S1 = "", S = "";
+                string S1 = "", S = "";
 
-                { 
-                string[] words = Time1.Split(' ');
-                S1 = words[0] + " 23:59:59'";
+                {
+                    string[] words = Time1.Split(' ');
+                    S1 = words[0] + " 23:59:59'";
                 }
 
-                if (NumOperation==1)
+                if (NumOperation == 1)
                 {
                     S1 = Time2 + "'";
                 }
 
                 S = SELECT_DAY_TIME + " " + id.ToString();
-                S = S + " and tcon.tcon_time >= " + "'" + Time1 + "'"   
-                    +" and tcon.tcon_time <= '" + S1
+                S = S + " and tcon.tcon_time >= " + "'" + Time1 + "'"
+                    + " and tcon.tcon_time <= '" + S1
                     + "   order by  tcon.tcon_time";
 
                 command.CommandText = S;
 
-
-
                 OdbcDataReader dataReader = command.ExecuteReader();
 
-                 element = new SensorMes();
-               
+                element = new SensorMes();
+
                 dataReader.Read();
                 if (!dataReader.HasRows)
                 {
@@ -294,7 +322,7 @@ namespace ReportUT_
                 element.TimeS = Convert.ToDateTime(dataReader[1]);
                 element.Temperature = (float)Convert.ToDouble(dataReader[2]);
                 element.Humidity = (float)Convert.ToDouble(dataReader[3]);
-               // S = ConvertTo_Name_and_Type(element.Id);
+                // S = ConvertTo_Name_and_Type(element.Id);
                 return element;
             }
 
@@ -304,6 +332,9 @@ namespace ReportUT_
                 element.Id = -1000;
                 return element;
             }
+            #endregion
+
+
 
         }
 
@@ -341,7 +372,7 @@ namespace ReportUT_
         /// <param name="Time2"> too times for one month</param>
         /// <param name="NumOperation">  0 - only Time1; 1 - Time1,2; 3 - Month 1,2 ;</param>
         /// <returns></returns>
-        public SensorMes OneSensor(int id, string Time1, string Time2,int NumOperation)
+        public SensorMes OneSensor(List<SensorMes> LSM, int id, string Time1, string Time2,int NumOperation)
         {
 
             SensorMes Sn = new SensorMes();
@@ -352,7 +383,8 @@ namespace ReportUT_
                 // _sensors = new List<Sensor>();
 
                 ODC.OpenConnection();
-                Sn = ODC.Get_DAY_MeasurementDataIdBySensorId(id, Time1,Time2, NumOperation);
+                // Sn = ODC.Get_DAY_MeasurementDataIdBySensorId(id, Time1,Time2, NumOperation);
+                Sn = ODC.Get_DAY_MeasSensorId(LSM ,id, Time1, Time2, NumOperation);
                 ODC.CloseConnection();
                 return Sn;
             }

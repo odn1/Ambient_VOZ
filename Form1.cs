@@ -185,45 +185,50 @@ namespace ReportUT_
             Button_Exec_Report.Text = "1%";
             label_Count.Focus();
 
+            // DateTime d1 = DateTime.Now;
 
-            Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker_Start_Time.Value.ToString(),dateTimePicker_Stop_Time.Value.ToString());
+            //            Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker_Start_Time.Value.ToString(),dateTimePicker_Stop_Time.Value.ToString());
+            //          Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker_Start_Time.Value.ToString(), dateTimePicker_Start_Time.Value.AddMonths(1).ToString());
+            Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker1.Value.AddMonths(1).ToString());
+            ;
+            //pSensorMes = Listsensor_Mes.Where(w => w.Id == 4).FirstOrDefault(p => p.TimeS > dateTimePicker_Start_Time.Value &&
+            // //           p.TimeS < dateTimePicker_Start_Time.Value.AddDays(1));
+            // p.TimeS < dateTimePicker_Start_Time.Value.AddHours(1));
+
+            //long D3 = DateTime.Now.Ticks - d1.Ticks;
+
+          //  return;
+
             #region [ Task.Run(()]
+            Task.Run(() =>
+            {
 
+                for (int sn_n = 0; sn_n < sensors.Count; sn_n++)
+                {
+                    One_Sens_Day(Listsensor_Mes,ListStr, ListStr1, ListStr2, ListStr3, sensors[sn_n].Id, sn_n);
+                    D_procent = D_procent + procent;
+                    prc = (int)D_procent;
 
+                    if (onProgress != null) onProgress(prc);
+                    if (onSet_End != null) onSet_End(sn_n);
 
-            //Task.Run(() =>
-            //{
+                    if (onLabelText != null) onLabelText(sn_n + 1);
 
-            //    for (int sn_n = 0; sn_n < sensors.Count; sn_n++)
-            //    {
-            //        One_Sens_Day(ListStr, ListStr1, ListStr2, ListStr3, sensors[sn_n].Id,sn_n);
-            //        D_procent = D_procent + procent;
-            //         prc = (int)D_procent;
+                    //if (progressBar1.Value > 99) progressBar1.Value = 0;
+                    //progressBar1.Value += 5;
+                }
 
-            //        if (onProgress != null) onProgress(prc);
-            //        if (onSet_End != null) onSet_End(sn_n); 
-
-            //        if (onLabelText != null)  onLabelText(sn_n+1);
-
-            //        //if (progressBar1.Value > 99) progressBar1.Value = 0;
-            //        //progressBar1.Value += 5;
-            //    }
-
-            //});
+            });
             #endregion
 
-           //DateTime? result = Listsensor_Mes.Where(w => w.Id == 1).Select(s => s.TimeS <= DateTime.Now).;
 
-            var selectedPeople = Listsensor_Mes.Where(w => w.Id == 4).First(p => p.TimeS > dateTimePicker_Start_Time.Value &&
-            p.TimeS < dateTimePicker_Start_Time.Value.AddHours(2));
 
-            //Listsensor_Mes.Find((x => x > dateTimePicker_Start_Time.To && x > DateLastVisit))
 
             progressBar1.Value = 1;
         }
 
 
-        private void One_Sens_Day(string[] ListStr, string[] ListStr1, string[] ListStr2, string[] ListStr3, int iDS, int numS)
+        private void One_Sens_Day(List<SensorMes> LSM,string[] ListStr, string[] ListStr1, string[] ListStr2, string[] ListStr3, int iDS, int numS)
         {
             DateTime dateTm = RepDAYs.dateT1;
             DateTime dateTm2 = RepDAYs.dateT2;
@@ -237,13 +242,15 @@ namespace ReportUT_
 
             for (int j = 1; j <= countDays; j++)
             {
-                pSensorMes = p_odbcConnector.OneSensor(iDS, dateTm.ToString(), dateTm2.ToString(), 0);
+                pSensorMes = p_odbcConnector.OneSensor(LSM,iDS, dateTm.ToString(), dateTm2.ToString(), 0);
                 if (checkBox2.Checked)
                 {
                     if (dateTm != dateTm2)
-                        pSensorMes = p_odbcConnector.OneSensor(iDS, dateTm.ToString(), dateTm2.ToString(), 1);
-                    else pSensorMes = p_odbcConnector.OneSensor(iDS, dateTm.ToString(), dateTm2.ToString(), 0);
+                        pSensorMes = p_odbcConnector.OneSensor(LSM,iDS, dateTm.ToString(), dateTm2.ToString(), 1);
+                    else pSensorMes = p_odbcConnector.OneSensor(LSM,iDS, dateTm.ToString(), dateTm2.ToString(), 0);
                 }
+
+                if (pSensorMes!=null)
 
                 if (pSensorMes.Id != -1000)//{valid = false; progressBar1.Value += 5; break; }
                 {
@@ -277,7 +284,7 @@ namespace ReportUT_
 
                     for (int j = 1; j <= countDays; j++)
                     {
-                        pSensorMes = p_odbcConnector.OneSensor(iDS, dateTm2.ToString(), dateTm2.ToString(), 0);
+                        pSensorMes = p_odbcConnector.OneSensor(Listsensor_Mes,iDS, dateTm2.ToString(), dateTm2.ToString(), 0);
                         if (pSensorMes.Id != -1000)//{valid = false; progressBar1.Value += 5; break; }
                         {
                             ListStr[j] = pSensorMes.TimeS.ToString();  //   //("HH:mm"); 

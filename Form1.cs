@@ -182,22 +182,10 @@ namespace ReportUT_
             double procent = (double)(100/(double)CountSensors);
             double D_procent = 0;
             int prc = 0;
-            Button_Exec_Report.Text = "1%";
+            Button_Exec_Report.Text = "%";
             label_Count.Focus();
-
-            // DateTime d1 = DateTime.Now;
-
-            //            Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker_Start_Time.Value.ToString(),dateTimePicker_Stop_Time.Value.ToString());
-            //          Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker_Start_Time.Value.ToString(), dateTimePicker_Start_Time.Value.AddMonths(1).ToString());
-            Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker1.Value.AddMonths(1).ToString());
-            ;
-            //pSensorMes = Listsensor_Mes.Where(w => w.Id == 4).FirstOrDefault(p => p.TimeS > dateTimePicker_Start_Time.Value &&
-            // //           p.TimeS < dateTimePicker_Start_Time.Value.AddDays(1));
-            // p.TimeS < dateTimePicker_Start_Time.Value.AddHours(1));
-
-            //long D3 = DateTime.Now.Ticks - d1.Ticks;
-
-          //  return;
+          Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker1.Value.AddMonths(1).ToString());
+   
 
             #region [ Task.Run(()]
             Task.Run(() =>
@@ -280,11 +268,10 @@ namespace ReportUT_
                     countDays = System.DateTime.DaysInMonth(dateTm2.Year, dateTm2.Month);
                     HH_mm = dateTm2.ToString(" HHч mmмин "); ;// "_" + dateTm.Hour.ToString() + "_" + dateTm.Minute.ToString();
 
-                
-
                     for (int j = 1; j <= countDays; j++)
                     {
                         pSensorMes = p_odbcConnector.OneSensor(Listsensor_Mes,iDS, dateTm2.ToString(), dateTm2.ToString(), 0);
+                    if (pSensorMes!=null)
                         if (pSensorMes.Id != -1000)//{valid = false; progressBar1.Value += 5; break; }
                         {
                             ListStr[j] = pSensorMes.TimeS.ToString();  //   //("HH:mm"); 

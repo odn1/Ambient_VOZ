@@ -264,6 +264,9 @@ namespace ReportUT_
             SensorMes element = new SensorMes();
             element.Id = -1000;
             DateTime D2 = DateTime.Parse(Time1).AddHours(4); 
+
+
+
             //D2.AddHours(1);
             try
             {
@@ -436,25 +439,17 @@ namespace ReportUT_
                 OdbcCommand command = connection.CreateCommand();
 
                 string S = SELECT_ALL_SENSORS_MES  +"'" + Time1 + "'" + " and tcon.tcon_time <=" + "'" + Time2 + "'" + "   order by  tcon.tcon_time"; ;
-               // S = S + " and tcon.tcon_time >= " + "'" + Time1 + "'"
-                //    + " and tcon.tcon_time <= '" + S1
-                //    + "   order by  tcon.tcon_time";
 
                 command.CommandText = S;
                 OdbcDataReader dataReader = command.ExecuteReader();
                 _sensorsMes.Clear();
                 while (dataReader.Read())
                 {
-                    //tcon.tcon_time,  0
-                    //tcon.tcon_temp,1
-                    //tcon.tcon_hum,2
-                    //tcon.tcon_pres,3
-                    //tcon.id_sens4
                     SensorMes sensorMes = new SensorMes();
                     sensorMes.TimeS = Convert.ToDateTime(dataReader[0]);
-                    sensorMes.Temperature = Convert.ToInt32(dataReader[1]);
-                    sensorMes.Humidity = Convert.ToInt32(dataReader[2]);
-                    sensorMes.Pressure  = Convert.ToInt32(dataReader[3]);
+                    sensorMes.Temperature = Convert.ToSingle(dataReader[1]);
+                    sensorMes.Humidity = Convert.ToSingle(dataReader[2]);
+                    sensorMes.Pressure  = Convert.ToSingle(dataReader[3]);
                     sensorMes.Id = Convert.ToInt32(dataReader[4]);
                     _sensorsMes.Add(sensorMes);
                 }

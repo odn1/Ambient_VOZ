@@ -7,22 +7,21 @@ using System.Data.Odbc;
 using IniParser;
 using IniParser.Model;
 using System.IO;
+using System.Windows;
 
 namespace ReportUT_
 {
-
-    public class IniReader
+    public partial class IniReader
     {
         static string Path = "AmbientService.ini";
-
         public static string Read(string Key, string Section = "")
         {
             var parser = new FileIniDataParser();
             IniData ini = parser.ReadFile(Path);
+
             return ini[Section][Key];
         }
     }
-
     public class Logger
     {
         #region Singlton
@@ -91,10 +90,7 @@ namespace ReportUT_
     public class SensorMes
     {
         public int Id;  // проверка валидности -1000 - плохо
-      //  public string Name;
-      //  public string Type;
         public DateTime TimeS;
-       // public String TimeStr;
         private float temperature;
         public float Temperature
         {
@@ -156,34 +152,49 @@ namespace ReportUT_
         private static string SELECT_ROOM_SENSORS = "SELECT ROOM_NAME FROM S_AMBIENT_MAP_ICO WHERE ROOM_ID = (SELECT MAP_ID FROM S_AMBIENT_MAP_THB WHERE THB_ID= ";
         static string SELECT_ALL_SENSORS_MES = "select  tcon.tcon_time,  tcon.tcon_temp,  tcon.tcon_hum,  tcon.tcon_pres,  tcon.id_sens from i_test_conditions tcon where tcon.tcon_time >=";
         //    '1.01.2022 08:59:59'  and
-       //  tcon.tcon_time <='31.12.2022 23:59:59'
+        //  tcon.tcon_time <='31.12.2022 23:59:59'
 
 
 
-        private static OdbcConnection connection;
+        public  OdbcConnection connection;
 
-        //public List<SensorMes> Listsensor_Mes { get; private set; }
-        //public void Listsensor_Mes_Set (List<SensorMes> Sl )
-        //{
-        //    Listsensor_Mes = Sl;
-        //}
-
-
-        // private   OdbcConnector ODC;
-
-        public OdbcConnector()
+        public OdbcConnector(string DSN_Str)
         {
-            string connectionString = "DSN=" + IniReader.Read("DBAllias", "DB");
+ try
+            {      
+               // string connectionString = "DSN=" + IniReader.Read("DBAllias", "DB");
+         
+string connectionString = "DSN=" + DSN_Str;  //IniReader.Read("DBAllias", "DB");
             connection = new OdbcConnection(connectionString);
-
+               // if (connection.DataSource == "")
+                  //   MessageBox.Show("нет подключения к БД. \nВ настройках поверьте Источник данных(DSN)");
+                
+            }
+            catch
+            {
+            if (connection.DataSource == "")
+                { MessageBox.Show("нет подключения к БД. \nВ настройках поверьте Источник данных(DSN)", "Err");
+                  return;
+                }
+            }
         }
         public void OpenConnection()
         {
+            try
+            {
+  // if (connection.DataSource!="")
             connection.Open();
+            }
+            catch
+            {
+                ;
+            }
+         
         }
         public void CloseConnection()
         {
-            connection.Close();
+           // if (connection.DataSource != "")
+                connection.Close();
         }
         public void Sens_Type_Limits()
         {
@@ -284,65 +295,6 @@ namespace ReportUT_
 
         }
 
-            //одно измерение по одному датчику 
-        //    public SensorMes Get_DAY_MeasurementDataIdBySensorId(int id, string Time1, string Time2,int NumOperation)
-        //{
-        //    SensorMes element = new SensorMes();
-        //    element.Id = -1000;
-        //    #region [1]
-        //    try
-        //    {
-        //        OdbcCommand command = connection.CreateCommand();
-        //        string S1 = "", S = "";
-
-        //        {
-        //            string[] words = Time1.Split(' ');
-        //            S1 = words[0] + " 23:59:59'";
-        //        }
-
-        //        if (NumOperation == 1)
-        //        {
-        //            S1 = Time2 + "'";
-        //        }
-
-        //        S = SELECT_DAY_TIME + " " + id.ToString();
-        //        S = S + " and tcon.tcon_time >= " + "'" + Time1 + "'"
-        //            + " and tcon.tcon_time <= '" + S1
-        //            + "   order by  tcon.tcon_time";
-
-        //        command.CommandText = S;
-
-        //        OdbcDataReader dataReader = command.ExecuteReader();
-
-        //        element = new SensorMes();
-
-        //        dataReader.Read();
-        //        if (!dataReader.HasRows)
-        //        {
-        //            element.Id = -1000;
-        //            return element;
-        //        }
-
-        //        element.Id = Convert.ToInt32(dataReader[0]);
-        //        element.TimeS = Convert.ToDateTime(dataReader[1]);
-        //        element.Temperature = (float)Convert.ToDouble(dataReader[2]);
-        //        element.Humidity = (float)Convert.ToDouble(dataReader[3]);
-        //        // S = ConvertTo_Name_and_Type(element.Id);
-        //        return element;
-        //    }
-
-        //    catch (Exception ex)
-        //    {
-        //        Logger.GetInstanse().SetData("Get_DAY_MeasurementDataIdBySensorId", ex.Message);
-        //        element.Id = -1000;
-        //        return element;
-        //    }
-        //    #endregion
-
-
-
-        //}
-
         public string Get_RoomSensorId(int id)
         {
              string element= "";
@@ -377,14 +329,14 @@ namespace ReportUT_
         /// <param name="Time2"> too times for one month</param>
         /// <param name="NumOperation">  0 - only Time1; 1 - Time1,2; 3 - Month 1,2 ;</param>
         /// <returns></returns>
-        public SensorMes OneSensor(List<SensorMes> LSM, int id, string Time1, string Time2,int NumOperation)
+        public SensorMes OneSensor(List<SensorMes> LSM, int id, string Time1, string Time2,int NumOperation,string DSN_Str)
         {
 
             SensorMes Sn = new SensorMes();
             Sn.Id = -1000;
             try
             {
-                OdbcConnector ODC = new OdbcConnector();
+                OdbcConnector ODC = new OdbcConnector(DSN_Str);
                 // _sensors = new List<Sensor>();
 
                 ODC.OpenConnection();
@@ -406,10 +358,16 @@ namespace ReportUT_
 
             try
             {
+               // if (connection.DataSource == "") { MessageBox.Show("нет подключения к БД");  return sensors;  }
                 this.OpenConnection();
+                if (connection.DataSource == "") 
+                { MessageBox.Show("нет подключения к БД. \nВ настройках поверьте Источник данных(DSN)");
+                    return sensors; 
+                }
                 OdbcCommand command = connection.CreateCommand();
                 command.CommandText = SELECT_ALL_SENSORS;
-                OdbcDataReader dataReader = command.ExecuteReader();
+              OdbcDataReader dataReader = command.ExecuteReader();  
+                
                 sensors.Clear();
                 while (dataReader.Read())
                 {
@@ -437,6 +395,7 @@ namespace ReportUT_
 
             try
             {
+               // if (connection.DataSource == "") { MessageBox.Show("нет подключения к БД"); return _sensorsMes; }
                 this.OpenConnection();
                 OdbcCommand command = connection.CreateCommand();
 

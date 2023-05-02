@@ -2,7 +2,6 @@ E:\2023\Ambient\VOZ_1\Ambient_VOZ\bin\Debug\ReportUT_.exe.config
 E:\2023\Ambient\VOZ_1\Ambient_VOZ\obj\Debug\ReportUT_.Form1.resources
 E:\2023\Ambient\VOZ_1\Ambient_VOZ\obj\Debug\ReportUT_.Properties.Resources.resources
 E:\2023\Ambient\VOZ_1\Ambient_VOZ\obj\Debug\ReportUT_.csproj.GenerateResource.Cache
-E:\2023\Ambient\VOZ_1\Ambient_VOZ\obj\Debug\ReportUT_.csproj.AssemblyReference.cache
 E:\2023\Ambient\VOZ_1\Ambient_VOZ\obj\Debug\ReportUT_.csproj.CoreCompileInputs.cache
 E:\2023\Ambient\VOZ_1\Ambient_VOZ\bin\Debug\ReportUT_.exe
 E:\2023\Ambient\VOZ_1\Ambient_VOZ\bin\Debug\ReportUT_.pdb

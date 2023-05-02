@@ -22,8 +22,7 @@ namespace ReportUT_
         private event AddProgressEventHandler onProgress;
         private event AddProgressEventHandler onLabelText;
         private event AddProgressEventHandler onSet_End;
-        bool Flag = false;
-
+  
 
         string Path_ini = "AmbientRepService.dat";
         private Params pl = new Params();
@@ -32,10 +31,8 @@ namespace ReportUT_
         private ReportDAYs RepDAYs = new ReportDAYs();
 
         public List<Sensor> sensors = new List<Sensor>();
-        //public SensorMes Sn = new SensorMes();
-
+  
         public List<SensorMes> Listsensor_Mes = new List<SensorMes>();
-
 
         public SensorMes pSensorMes = new SensorMes();
 
@@ -75,15 +72,10 @@ namespace ReportUT_
             ToolTip t = new ToolTip();
             t.SetToolTip(Button_Settings, "Настройки");
 
-
-
         }
-
-
 
         private void materialSwitch1_CheckedChanged(object sender, EventArgs e)
         {
-
             dateTimePicker_2_Time.Visible = (!dateTimePicker_2_Time.Visible);
         }
 
@@ -93,7 +85,6 @@ namespace ReportUT_
             if (RepDAYs.BM2)
             {
                 dateTimePicker1.Format = DateTimePickerFormat.Custom;
-                // Display the date as "Mon 27 Feb 2012".  
                 dateTimePicker1.CustomFormat = "HH:mm";
             }
             else
@@ -175,11 +166,23 @@ namespace ReportUT_
                 }
             }
 
-
-            Flag = true;
             Seril_Param();
+            try
+            {
+ p_odbcConnector = new OdbcConnector(pl.DSN);
+            }
+            catch (Exception ex)
+            {
+                Logger.GetInstanse().SetData("Get_DAY_MeasSensorId", ex.Message);
+                MessageBox.Show(ex.Message);
+                return ;
+            }
 
-            p_odbcConnector = new OdbcConnector();
+            //if (p_odbcConnector.connection.DataSource == "")
+            //{
+            //    MessageBox.Show("нет подключения к БД. \nВ настройках поверьте Источник данных(DSN)");
+            //    return;
+            //}
 
             sensors = p_odbcConnector.AllSensors();
             p_odbcConnector.Sens_Type_Limits();
@@ -202,7 +205,7 @@ namespace ReportUT_
             // int iD = 3;
             string Bt = Button_Exec_Report.Text;
 
-            Button_Exec_Report.Text = "%";
+           // Button_Exec_Report.Text = "%";
             label_Count.Focus();
 
            // if (Moun > 0)
@@ -264,7 +267,7 @@ namespace ReportUT_
 
             for (int j = 1; j <= countDays; j++)
             {
-                pSensorMes = p_odbcConnector.OneSensor(LSM, iDS, dateTm.ToString(), dateTm2.ToString(), 0);
+                pSensorMes = p_odbcConnector.OneSensor(LSM, iDS, dateTm.ToString(), dateTm2.ToString(), 0, pl.DSN);
                 if (pSensorMes != null)
                     if (pSensorMes.Id != -1000)//{valid = false; progressBar1.Value += 5; break; }
                     {
@@ -295,7 +298,7 @@ namespace ReportUT_
 
                     for (int j = 1; j <= countDays; j++)
                     {
-                        pSensorMes = p_odbcConnector.OneSensor(Listsensor_Mes, iDS, dateTm2.ToString(), dateTm2.ToString(), 0);
+                        pSensorMes = p_odbcConnector.OneSensor(Listsensor_Mes, iDS, dateTm2.ToString(), dateTm2.ToString(), 0,pl.DSN);
                         if (pSensorMes != null)
                             if (pSensorMes.Id != -1000)//{valid = false; progressBar1.Value += 5; break; }
                             {

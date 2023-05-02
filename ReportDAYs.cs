@@ -94,6 +94,7 @@ namespace ReportUT_
       //  public string Name;
       //  public string Type;
         public DateTime TimeS;
+       // public String TimeStr;
         private float temperature;
         public float Temperature
         {
@@ -265,8 +266,6 @@ namespace ReportUT_
             element.Id = -1000;
             DateTime D2 = DateTime.Parse(Time1).AddHours(4); 
 
-
-
             //D2.AddHours(1);
             try
             {
@@ -275,71 +274,74 @@ namespace ReportUT_
                 &&                             p.TimeS < D2);
                 return element;
             }
-            catch
+            catch (Exception ex)
             {
+                Logger.GetInstanse().SetData("Get_DAY_MeasSensorId", ex.Message);
+                element.Id = -1000;
                 return element;
             }
+           
 
         }
 
             //одно измерение по одному датчику 
-            public SensorMes Get_DAY_MeasurementDataIdBySensorId(int id, string Time1, string Time2,int NumOperation)
-        {
-            SensorMes element = new SensorMes();
-            element.Id = -1000;
-            #region [1]
-            try
-            {
-                OdbcCommand command = connection.CreateCommand();
-                string S1 = "", S = "";
+        //    public SensorMes Get_DAY_MeasurementDataIdBySensorId(int id, string Time1, string Time2,int NumOperation)
+        //{
+        //    SensorMes element = new SensorMes();
+        //    element.Id = -1000;
+        //    #region [1]
+        //    try
+        //    {
+        //        OdbcCommand command = connection.CreateCommand();
+        //        string S1 = "", S = "";
 
-                {
-                    string[] words = Time1.Split(' ');
-                    S1 = words[0] + " 23:59:59'";
-                }
+        //        {
+        //            string[] words = Time1.Split(' ');
+        //            S1 = words[0] + " 23:59:59'";
+        //        }
 
-                if (NumOperation == 1)
-                {
-                    S1 = Time2 + "'";
-                }
+        //        if (NumOperation == 1)
+        //        {
+        //            S1 = Time2 + "'";
+        //        }
 
-                S = SELECT_DAY_TIME + " " + id.ToString();
-                S = S + " and tcon.tcon_time >= " + "'" + Time1 + "'"
-                    + " and tcon.tcon_time <= '" + S1
-                    + "   order by  tcon.tcon_time";
+        //        S = SELECT_DAY_TIME + " " + id.ToString();
+        //        S = S + " and tcon.tcon_time >= " + "'" + Time1 + "'"
+        //            + " and tcon.tcon_time <= '" + S1
+        //            + "   order by  tcon.tcon_time";
 
-                command.CommandText = S;
+        //        command.CommandText = S;
 
-                OdbcDataReader dataReader = command.ExecuteReader();
+        //        OdbcDataReader dataReader = command.ExecuteReader();
 
-                element = new SensorMes();
+        //        element = new SensorMes();
 
-                dataReader.Read();
-                if (!dataReader.HasRows)
-                {
-                    element.Id = -1000;
-                    return element;
-                }
+        //        dataReader.Read();
+        //        if (!dataReader.HasRows)
+        //        {
+        //            element.Id = -1000;
+        //            return element;
+        //        }
 
-                element.Id = Convert.ToInt32(dataReader[0]);
-                element.TimeS = Convert.ToDateTime(dataReader[1]);
-                element.Temperature = (float)Convert.ToDouble(dataReader[2]);
-                element.Humidity = (float)Convert.ToDouble(dataReader[3]);
-                // S = ConvertTo_Name_and_Type(element.Id);
-                return element;
-            }
+        //        element.Id = Convert.ToInt32(dataReader[0]);
+        //        element.TimeS = Convert.ToDateTime(dataReader[1]);
+        //        element.Temperature = (float)Convert.ToDouble(dataReader[2]);
+        //        element.Humidity = (float)Convert.ToDouble(dataReader[3]);
+        //        // S = ConvertTo_Name_and_Type(element.Id);
+        //        return element;
+        //    }
 
-            catch (Exception ex)
-            {
-                Logger.GetInstanse().SetData("Get_DAY_MeasurementDataIdBySensorId", ex.Message);
-                element.Id = -1000;
-                return element;
-            }
-            #endregion
+        //    catch (Exception ex)
+        //    {
+        //        Logger.GetInstanse().SetData("Get_DAY_MeasurementDataIdBySensorId", ex.Message);
+        //        element.Id = -1000;
+        //        return element;
+        //    }
+        //    #endregion
 
 
 
-        }
+        //}
 
         public string Get_RoomSensorId(int id)
         {
@@ -515,9 +517,7 @@ namespace ReportUT_
         bool bM2 = false;
 
 
-        string NameSens = "";
-        string TypeSens = "";
-        string NameRoom = "";
+     
 
   
 

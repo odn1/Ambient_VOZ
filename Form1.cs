@@ -165,8 +165,9 @@ namespace ReportUT_
 
             if (checkBox1.Checked)
             {
- Moun =  dateTimePicker_Stop_Time.Value.Month- dateTimePicker1.Value.Month;
-            if (Moun < 0) { MessageBox.Show("начальная дата  " + dateTimePicker1.Value.ToString()+
+            Moun =  dateTimePicker_Stop_Time.Value.Month - dateTimePicker1.Value.Month;
+            if (dateTimePicker_Start_Time.Value>dateTimePicker_Stop_Time.Value)
+                { MessageBox.Show("начальная дата  " + dateTimePicker1.Value.ToString()+
                 "\nне может превышать конечную  " + dateTimePicker_Stop_Time.Value.ToString()); return; }
             }
             
@@ -175,11 +176,6 @@ namespace ReportUT_
             Seril_Param();
 
             p_odbcConnector = new OdbcConnector();
-
-            RepDAYs.dateT1 = this.dateTimePicker1.Value;
-            RepDAYs.dateT2 = this.dateTimePicker_2_Time.Value;
-            RepDAYs.dateM1 = this.dateTimePicker_Start_Time.Value;
-            RepDAYs.dateM1 = this.dateTimePicker_Stop_Time.Value;
 
             sensors = p_odbcConnector.AllSensors();
             p_odbcConnector.Sens_Type_Limits();
@@ -201,51 +197,63 @@ namespace ReportUT_
 
             // int iD = 3;
             string Bt = Button_Exec_Report.Text;
-            int CountSensors = sensors.Count;
-            double procent = (double)(100/(double)CountSensors);
-            double D_procent = 0;
-            int prc = 0;
+            
             Button_Exec_Report.Text = "%";
             label_Count.Focus();
-if (Moun>0)
-                Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker1.Value.AddMonths(1).ToString());
+
+            if (Moun>0)
+    Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker_Stop_Time.Value.ToString());
 else
             Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker1.Value.AddMonths(1).ToString());
-   
-
+  
+            int CountSensors = sensors.Count;
+            double procent = (double)(100 /( (double)CountSensors * (Moun+1)));
+            double D_procent = 0;
+            int prc = 0;
+            RepDAYs.dateT1 = dateTimePicker1.Value;
+            RepDAYs.dateT2 = dateTimePicker_2_Time.Value;
+            // if (checkBox1.Checked) RepDAYs.dateT2 = dateTimePicker_2_Time.Value;
+            ;
             #region [ Task.Run(()]
             Task.Run(() =>
             {
-
-                for (int sn_n = 0; sn_n < sensors.Count; sn_n++)
+              //  int  Moun_n = 0;
+               for (int Moun_n = 0; Moun_n <= Moun; Moun_n++)
                 {
-                    One_Sens_Day(Listsensor_Mes,ListStr, ListStr1, ListStr2, ListStr3, sensors[sn_n].Id, sn_n);
-                    D_procent = D_procent + procent;
-                    prc = (int)D_procent;
+                    for (int sn_n = 0; sn_n < sensors.Count; sn_n++)
+                    {
+                        One_Sens_Day(Listsensor_Mes, ListStr, ListStr1, ListStr2, ListStr3, sensors[sn_n].Id, sn_n, Moun_n);
+                        D_procent = D_procent + procent;
+                        prc = (int)D_procent;
 
-                    if (onProgress != null) onProgress(prc);
-                    if (onSet_End != null) onSet_End(sn_n);
+                        if (onProgress != null) onProgress(prc);
+                        if (onSet_End != null) onSet_End(sn_n);
 
-                    if (onLabelText != null) onLabelText(sn_n + 1);
-
-                    //if (progressBar1.Value > 99) progressBar1.Value = 0;
-                    //progressBar1.Value += 5;
+                        if (onLabelText != null) onLabelText(sn_n + 1);
+                    }
+                    if (Moun > 0)
+                    {
+                        //dateTm = 
+                        RepDAYs.dateT1 = RepDAYs.dateT1.AddMonths(1);
+                        // dateTm2 =
+                        RepDAYs.dateT2 = RepDAYs.dateT2.AddMonths(1);
+                    }
+                    if (onProgress != null) onProgress(0);
                 }
 
             });
             #endregion
 
-
-
-
             progressBar1.Value = 1;
         }
 
 
-        private void One_Sens_Day(List<SensorMes> LSM,string[] ListStr, string[] ListStr1, string[] ListStr2, string[] ListStr3, int iDS, int numS)
+        private void One_Sens_Day(List<SensorMes> LSM,string[] ListStr, string[] ListStr1, string[] ListStr2, string[] ListStr3, int iDS, int numS, int Mountn)
         {
-            DateTime dateTm = RepDAYs.dateT1;
-            DateTime dateTm2 = RepDAYs.dateT2;
+            DateTime dateTm= RepDAYs.dateT1;
+            DateTime dateTm2= RepDAYs.dateT2;
+
+           
 
             for (int i = 1; i < 32; i++)
             { ListStr[i] = ListStr1[i] = ListStr2[i] = "" ; }
@@ -257,18 +265,10 @@ else
             for (int j = 1; j <= countDays; j++)
             {
                 pSensorMes = p_odbcConnector.OneSensor(LSM,iDS, dateTm.ToString(), dateTm2.ToString(), 0);
-                if (checkBox2.Checked)
-                {
-                    if (dateTm != dateTm2)
-                        pSensorMes = p_odbcConnector.OneSensor(LSM,iDS, dateTm.ToString(), dateTm2.ToString(), 1);
-                    else pSensorMes = p_odbcConnector.OneSensor(LSM,iDS, dateTm.ToString(), dateTm2.ToString(), 0);
-                }
-
                 if (pSensorMes!=null)
-
                 if (pSensorMes.Id != -1000)//{valid = false; progressBar1.Value += 5; break; }
                 {
-                    ListStr[j] = pSensorMes.TimeS.ToString();  //   //("HH:mm"); 
+                    ListStr[j] = pSensorMes.TimeS.ToString("HH:mm"); // ();  //   //
                     ListStr1[j] = pSensorMes.Temperature.ToString();
                     ListStr2[j] = pSensorMes.Humidity.ToString();
                 }
@@ -278,20 +278,19 @@ else
                 }
 
                 dateTm = dateTm.AddDays(1);
-                if (checkBox2.Checked) dateTm2 = dateTm2.AddDays(1);
+               // if (checkBox2.Checked) dateTm2 = dateTm2.AddDays(1);
             }
+             Save_Day_mes(ListStr, ListStr1, ListStr2, ListStr3, HH_mm, numS);
 
-            Save_Day_mes(ListStr, ListStr1, ListStr2, ListStr3, HH_mm, numS);
-
-
+             dateTm = RepDAYs.dateT1;
+             dateTm2 = RepDAYs.dateT2;
             if (checkBox2.Checked)
                 if (dateTm != dateTm2)
                 {
                     for (int i = 1; i < 32; i++)
                     { ListStr[i] = ListStr1[i] = ListStr2[i] = ""; }
-
-    dateTm2 = RepDAYs.dateT2;
-                    countDays = System.DateTime.DaysInMonth(dateTm2.Year, dateTm2.Month);
+ 
+                   countDays = System.DateTime.DaysInMonth(dateTm2.Year, dateTm2.Month);
                     HH_mm = dateTm2.ToString(" HHч mmмин "); ;// "_" + dateTm.Hour.ToString() + "_" + dateTm.Minute.ToString();
 
                     for (int j = 1; j <= countDays; j++)
@@ -300,7 +299,7 @@ else
                     if (pSensorMes!=null)
                         if (pSensorMes.Id != -1000)//{valid = false; progressBar1.Value += 5; break; }
                         {
-                            ListStr[j] = pSensorMes.TimeS.ToString();  //   //("HH:mm"); 
+                            ListStr[j] = pSensorMes.TimeS.ToString("HH:mm"); //();  //   
                             ListStr1[j] = pSensorMes.Temperature.ToString();
                             ListStr2[j] = pSensorMes.Humidity.ToString();
                         }
@@ -310,8 +309,9 @@ else
                         }
                         dateTm2 = dateTm2.AddDays(1);
                     }
-                    Save_Day_mes(ListStr, ListStr1, ListStr2, ListStr3, HH_mm, numS);
+             Save_Day_mes(ListStr, ListStr1, ListStr2, ListStr3, HH_mm, numS);                   
                 }
+  
         }
 
         private void Save_Day_mes(string[] ListStr, string[] ListStr1, string[] ListStr2, string[] ListStr3, string HH_mm, int num)

@@ -17,7 +17,7 @@ namespace ReportUT_
 {
     delegate void AddProgressEventHandler(int val);
 
-    public partial class Form1 :    Form  /// MaterialForm  
+    public partial class Form1 : Form  /// MaterialForm  
     {
         private event AddProgressEventHandler onProgress;
         private event AddProgressEventHandler onLabelText;
@@ -29,13 +29,13 @@ namespace ReportUT_
         private Params pl = new Params();
         private OdbcConnector p_odbcConnector;
 
-        private ReportDAYs RepDAYs  = new ReportDAYs();
+        private ReportDAYs RepDAYs = new ReportDAYs();
 
         public List<Sensor> sensors = new List<Sensor>();
         //public SensorMes Sn = new SensorMes();
 
         public List<SensorMes> Listsensor_Mes = new List<SensorMes>();
-   
+
 
         public SensorMes pSensorMes = new SensorMes();
 
@@ -47,7 +47,7 @@ namespace ReportUT_
             DateTime dt = DateTime.Now;
             onProgress += new AddProgressEventHandler(Form1_onProgress);
             onLabelText += new AddProgressEventHandler(Form1_onLabelText);
-            onSet_End  += new AddProgressEventHandler(Form1_onSet_End);
+            onSet_End += new AddProgressEventHandler(Form1_onSet_End);
 
             dateTimePicker1.Value = new DateTime(dt.Year, dt.Month, 1, dt.Hour, dt.Minute, dt.Second);
             dateTimePicker_2_Time.Value = new DateTime(dt.Year, dt.Month, 1, dt.Hour, dt.Minute, dt.Second);
@@ -60,7 +60,7 @@ namespace ReportUT_
 
             dateTimePicker_2_Time.MaxDate = DateTime.Now;
             dateTimePicker_2_Time.Format = DateTimePickerFormat.Custom;
-           // dateTimePicker_2_Time.Value  = DateTime.Now;
+            // dateTimePicker_2_Time.Value  = DateTime.Now;
             dateTimePicker_2_Time.ShowUpDown = true;
             dateTimePicker_2_Time.CustomFormat = " HH:mm";
 
@@ -71,15 +71,15 @@ namespace ReportUT_
             dateTimePicker_Stop_Time.MaxDate = DateTime.Now;
             dateTimePicker_Stop_Time.ShowUpDown = true;
             dateTimePicker_Stop_Time.CustomFormat = "yyyy MMMM";
-           
+
             ToolTip t = new ToolTip();
             t.SetToolTip(Button_Settings, "Настройки");
 
-            
+
 
         }
 
-    
+
 
         private void materialSwitch1_CheckedChanged(object sender, EventArgs e)
         {
@@ -100,10 +100,10 @@ namespace ReportUT_
             {
                 dateTimePicker1.CustomFormat = "yyyy MMMM HH:mm";
             }
-                
-            
+
+
             DateTime dt = dateTimePicker1.Value;
-          //  dateTimePicker1.Value = new DateTime(dt.Year, dt.Month, 1, dt.Hour, dt.Minute, dt.Second);
+            //  dateTimePicker1.Value = new DateTime(dt.Year, dt.Month, 1, dt.Hour, dt.Minute, dt.Second);
 
             dateTimePicker1.MaxDate = DateTime.Now;
             dateTimePicker_2_Time.MaxDate = DateTime.Now;
@@ -112,7 +112,7 @@ namespace ReportUT_
             RepDAYs.T11 = dateTimePicker1.Value.ToShortDateString();
             RepDAYs.T12 = dateTimePicker_2_Time.Value.ToString();
 
-           dateTimePicker1.Value = DateTime.Parse(RepDAYs.T11);
+            dateTimePicker1.Value = DateTime.Parse(RepDAYs.T11);
         }
 
 
@@ -125,11 +125,13 @@ namespace ReportUT_
         private void dateTimePicker_2_Time_ValueChanged(object sender, EventArgs e)
         {
             DateTime dt = dateTimePicker_2_Time.Value;
-            if (dt < dateTimePicker1.Value) {
-                     MessageBox.Show("начало периода  " + dateTimePicker1.Value.ToString() +
-        "\nне может превышать его окончание  " + dateTimePicker_2_Time.Value.ToString()); 
-                    dateTimePicker_2_Time.Value = dateTimePicker1.Value;
-                  return; }
+            if (dt < dateTimePicker1.Value)
+            {
+                MessageBox.Show("начало периода  " + dateTimePicker1.Value.ToString() +
+   "\nне может превышать его окончание  " + dateTimePicker_2_Time.Value.ToString());
+                dateTimePicker_2_Time.Value = dateTimePicker1.Value;
+                return;
+            }
 
             RepDAYs.T12 = dateTimePicker_2_Time.Value.ToString();
         }
@@ -161,16 +163,18 @@ namespace ReportUT_
 
         private void Button_Exec_Report_Click(object sender, EventArgs e)
         {
-            int Moun=0;
+            int Moun = 0;
 
             if (checkBox1.Checked)
             {
-            Moun =  dateTimePicker_Stop_Time.Value.Month - dateTimePicker1.Value.Month;
-            if (dateTimePicker_Start_Time.Value>dateTimePicker_Stop_Time.Value)
-                { MessageBox.Show("начальная дата  " + dateTimePicker1.Value.ToString()+
-                "\nне может превышать конечную  " + dateTimePicker_Stop_Time.Value.ToString()); return; }
+                Moun = dateTimePicker_Stop_Time.Value.Month - dateTimePicker1.Value.Month;
+                if (dateTimePicker_Start_Time.Value > dateTimePicker_Stop_Time.Value)
+                {
+                    MessageBox.Show("начальная дата  " + dateTimePicker1.Value.ToString() +
+                  "\nне может превышать конечную  " + dateTimePicker_Stop_Time.Value.ToString()); return;
+                }
             }
-            
+
 
             Flag = true;
             Seril_Param();
@@ -197,29 +201,28 @@ namespace ReportUT_
 
             // int iD = 3;
             string Bt = Button_Exec_Report.Text;
-            
+
             Button_Exec_Report.Text = "%";
             label_Count.Focus();
 
-            if (Moun>0)
-    Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker_Stop_Time.Value.ToString());
-else
-            Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker1.Value.AddMonths(1).ToString());
-  
+           // if (Moun > 0)
+            //    Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker_Stop_Time.Value.ToString());
+           // else
+           //     Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker1.Value.AddMonths(1).ToString());
+
             int CountSensors = sensors.Count;
-            double procent = (double)(100 /( (double)CountSensors * (Moun+1)));
+            double procent = (double)(100 / ((double)CountSensors * (Moun + 1)));
             double D_procent = 0;
             int prc = 0;
             RepDAYs.dateT1 = dateTimePicker1.Value;
             RepDAYs.dateT2 = dateTimePicker_2_Time.Value;
-            // if (checkBox1.Checked) RepDAYs.dateT2 = dateTimePicker_2_Time.Value;
-            ;
+
             #region [ Task.Run(()]
             Task.Run(() =>
             {
-              //  int  Moun_n = 0;
-               for (int Moun_n = 0; Moun_n <= Moun; Moun_n++)
+                for (int Moun_n = 0; Moun_n <= Moun; Moun_n++)
                 {
+                    Listsensor_Mes = p_odbcConnector.AllSensors_Mes(RepDAYs.dateT1.ToString(), RepDAYs.dateT1.AddMonths(1).ToString());
                     for (int sn_n = 0; sn_n < sensors.Count; sn_n++)
                     {
                         One_Sens_Day(Listsensor_Mes, ListStr, ListStr1, ListStr2, ListStr3, sensors[sn_n].Id, sn_n, Moun_n);
@@ -233,9 +236,7 @@ else
                     }
                     if (Moun > 0)
                     {
-                        //dateTm = 
                         RepDAYs.dateT1 = RepDAYs.dateT1.AddMonths(1);
-                        // dateTm2 =
                         RepDAYs.dateT2 = RepDAYs.dateT2.AddMonths(1);
                     }
                     if (onProgress != null) onProgress(0);
@@ -243,20 +244,19 @@ else
 
             });
             #endregion
-
             progressBar1.Value = 1;
         }
 
 
-        private void One_Sens_Day(List<SensorMes> LSM,string[] ListStr, string[] ListStr1, string[] ListStr2, string[] ListStr3, int iDS, int numS, int Mountn)
+        private void One_Sens_Day(List<SensorMes> LSM, string[] ListStr, string[] ListStr1, string[] ListStr2, string[] ListStr3, int iDS, int numS, int Mountn)
         {
-            DateTime dateTm= RepDAYs.dateT1;
-            DateTime dateTm2= RepDAYs.dateT2;
+            DateTime dateTm = RepDAYs.dateT1;
+            DateTime dateTm2 = RepDAYs.dateT2;
 
-           
+
 
             for (int i = 1; i < 32; i++)
-            { ListStr[i] = ListStr1[i] = ListStr2[i] = "" ; }
+            { ListStr[i] = ListStr1[i] = ListStr2[i] = ""; }
 
             int countDays = System.DateTime.DaysInMonth(dateTm.Year, dateTm.Month);
             string HH_mm = dateTm.ToString(" HHч mmмин ");     // "_" + dateTm.Hour.ToString() + "_" + dateTm.Minute.ToString();
@@ -264,54 +264,54 @@ else
 
             for (int j = 1; j <= countDays; j++)
             {
-                pSensorMes = p_odbcConnector.OneSensor(LSM,iDS, dateTm.ToString(), dateTm2.ToString(), 0);
-                if (pSensorMes!=null)
-                if (pSensorMes.Id != -1000)//{valid = false; progressBar1.Value += 5; break; }
-                {
-                    ListStr[j] = pSensorMes.TimeS.ToString("HH:mm"); // ();  //   //
-                    ListStr1[j] = pSensorMes.Temperature.ToString();
-                    ListStr2[j] = pSensorMes.Humidity.ToString();
-                }
-                else
-                {
-                    ListStr[j] = ListStr1[j] = ListStr2[j] = "";
-                }
+                pSensorMes = p_odbcConnector.OneSensor(LSM, iDS, dateTm.ToString(), dateTm2.ToString(), 0);
+                if (pSensorMes != null)
+                    if (pSensorMes.Id != -1000)//{valid = false; progressBar1.Value += 5; break; }
+                    {
+                        ListStr[j] = pSensorMes.TimeS.ToString("HH:mm"); // ();  //   //
+                        ListStr1[j] = pSensorMes.Temperature.ToString();
+                        ListStr2[j] = pSensorMes.Humidity.ToString();
+                    }
+                    else
+                    {
+                        ListStr[j] = ListStr1[j] = ListStr2[j] = "";
+                    }
 
                 dateTm = dateTm.AddDays(1);
-               // if (checkBox2.Checked) dateTm2 = dateTm2.AddDays(1);
+                // if (checkBox2.Checked) dateTm2 = dateTm2.AddDays(1);
             }
-             Save_Day_mes(ListStr, ListStr1, ListStr2, ListStr3, HH_mm, numS);
+            Save_Day_mes(ListStr, ListStr1, ListStr2, ListStr3, HH_mm, numS);
 
-             dateTm = RepDAYs.dateT1;
-             dateTm2 = RepDAYs.dateT2;
+            dateTm = RepDAYs.dateT1;
+            dateTm2 = RepDAYs.dateT2;
             if (checkBox2.Checked)
                 if (dateTm != dateTm2)
                 {
                     for (int i = 1; i < 32; i++)
                     { ListStr[i] = ListStr1[i] = ListStr2[i] = ""; }
- 
-                   countDays = System.DateTime.DaysInMonth(dateTm2.Year, dateTm2.Month);
+
+                    countDays = System.DateTime.DaysInMonth(dateTm2.Year, dateTm2.Month);
                     HH_mm = dateTm2.ToString(" HHч mmмин "); ;// "_" + dateTm.Hour.ToString() + "_" + dateTm.Minute.ToString();
 
                     for (int j = 1; j <= countDays; j++)
                     {
-                        pSensorMes = p_odbcConnector.OneSensor(Listsensor_Mes,iDS, dateTm2.ToString(), dateTm2.ToString(), 0);
-                    if (pSensorMes!=null)
-                        if (pSensorMes.Id != -1000)//{valid = false; progressBar1.Value += 5; break; }
-                        {
-                            ListStr[j] = pSensorMes.TimeS.ToString("HH:mm"); //();  //   
-                            ListStr1[j] = pSensorMes.Temperature.ToString();
-                            ListStr2[j] = pSensorMes.Humidity.ToString();
-                        }
-                        else
-                        {
-                            ListStr[j] = ListStr1[j] = ListStr2[j] = "";
-                        }
+                        pSensorMes = p_odbcConnector.OneSensor(Listsensor_Mes, iDS, dateTm2.ToString(), dateTm2.ToString(), 0);
+                        if (pSensorMes != null)
+                            if (pSensorMes.Id != -1000)//{valid = false; progressBar1.Value += 5; break; }
+                            {
+                                ListStr[j] = pSensorMes.TimeS.ToString("HH:mm"); //();  //   
+                                ListStr1[j] = pSensorMes.Temperature.ToString();
+                                ListStr2[j] = pSensorMes.Humidity.ToString();
+                            }
+                            else
+                            {
+                                ListStr[j] = ListStr1[j] = ListStr2[j] = "";
+                            }
                         dateTm2 = dateTm2.AddDays(1);
                     }
-             Save_Day_mes(ListStr, ListStr1, ListStr2, ListStr3, HH_mm, numS);                   
+                    Save_Day_mes(ListStr, ListStr1, ListStr2, ListStr3, HH_mm, numS);
                 }
-  
+
         }
 
         private void Save_Day_mes(string[] ListStr, string[] ListStr1, string[] ListStr2, string[] ListStr3, string HH_mm, int num)
@@ -466,7 +466,7 @@ else
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
-          //  checkBox3.CheckState = !checkBox3.CheckState;
+            //  checkBox3.CheckState = !checkBox3.CheckState;
         }
 
         void Form1_onProgress(int val)
@@ -479,14 +479,15 @@ else
             }
             else
             //progressBar1.Value += ;
-            { progressBar1.Value = val;
+            {
+                progressBar1.Value = val;
                 if (progressBar1.Value > 98) progressBar1.Value = 0;
-               
-               
-             }
 
-   
+
             }
+
+
+        }
 
 
         void Form1_onLabelText(int val)
@@ -499,11 +500,11 @@ else
             }
             else
             {
-                label_Count.Text = "Всего:" + sensors.Count.ToString() + " / Обработано:" +  val.ToString();
+                label_Count.Text = "Всего:" + sensors.Count.ToString() + " / Обработано:" + val.ToString();
 
             }
 
-           
+
         }
 
         private void Form1_onSet_End(int val)
@@ -516,21 +517,23 @@ else
             }
             else
             {
-                Button_Exec_Report.Text = ((100/ sensors.Count)* val).ToString() + "%";
+                Button_Exec_Report.Text = ((100 / sensors.Count) * val).ToString() + "%";
                 if (val == sensors.Count - 1)
-                     {
-                        { onProgress(100); Button_Exec_Report.Text = "Сформировать отчет"; }
-                    } 
+                {
+                    { onProgress(100); Button_Exec_Report.Text = "Сформировать отчет";
+                        MessageBox.Show("Фомирование отчетов выполнено", "Сообщение" );
+                    }
+                }
             }
 
         }
 
         private void panel4_Paint(object sender, PaintEventArgs e)
         {
-            
+
 
         }
     }
 
-   
+
 }

@@ -132,18 +132,18 @@ namespace ReportUT_
             DateTime dt = dateTimePicker_Start_Time.Value;
             dateTimePicker1.Value = dt;//
             dateTimePicker_Stop_Time.Value = dt;
-            RepDAYs.M11 = dateTimePicker_Start_Time.Value.ToString();
+           // RepDAYs.M11 = dateTimePicker_Start_Time.Value.ToString();
         }
 
         private void dateTimePicker_Stop_Time_ValueChanged(object sender, EventArgs e)
         {
             DateTime dt = dateTimePicker_Stop_Time.Value;
-            RepDAYs.M21 = dateTimePicker_Stop_Time.Value.ToString();
+           // RepDAYs.M21 = dateTimePicker_Stop_Time.Value.ToString();
         }
 
         private void Button_Reports_Click(object sender, EventArgs e)
         {
-            folderBrowserDialog1.Description = "Выбор местоположения для отчетов";
+            folderBrowserDialog1.Description = "Выбор местоположения для жуналов учета";
             if (folderBrowserDialog1.ShowDialog() == DialogResult.Cancel)
                 return;
             else
@@ -177,12 +177,6 @@ namespace ReportUT_
                 MessageBox.Show(ex.Message);
                 return ;
             }
-
-            //if (p_odbcConnector.connection.DataSource == "")
-            //{
-            //    MessageBox.Show("нет подключения к БД. \nВ настройках поверьте Источник данных(DSN)");
-            //    return;
-            //}
 
             sensors = p_odbcConnector.AllSensors();
             p_odbcConnector.Sens_Type_Limits();
@@ -244,7 +238,7 @@ namespace ReportUT_
                     }
                     if (onProgress != null) onProgress(0);
                 }
-
+                MessageBox.Show("Фомирование отчетов выполнено", "Сообщение");
             });
             #endregion
             progressBar1.Value = 1;
@@ -524,7 +518,7 @@ namespace ReportUT_
                 if (val == sensors.Count - 1)
                 {
                     { onProgress(100); Button_Exec_Report.Text = "Сформировать отчет";
-                        MessageBox.Show("Фомирование отчетов выполнено", "Сообщение" );
+  
                     }
                 }
             }

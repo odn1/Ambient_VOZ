@@ -11,17 +11,6 @@ using System.Windows;
 
 namespace ReportUT_
 {
-    public partial class IniReader
-    {
-        static string Path = "AmbientService.ini";
-        public static string Read(string Key, string Section = "")
-        {
-            var parser = new FileIniDataParser();
-            IniData ini = parser.ReadFile(Path);
-
-            return ini[Section][Key];
-        }
-    }
     public class Logger
     {
         #region Singlton
@@ -34,7 +23,7 @@ namespace ReportUT_
         #endregion
 
         private string logPath = "Log.txt";
-        private long maximumSize = 10485760;
+        private long maximumSize = 104857;
 
         private Logger()
         {
@@ -136,7 +125,7 @@ namespace ReportUT_
     {
 
         private List<SensorMes> _sensorsMes = new List<SensorMes>();
-    
+
         List<Sensor> sensors = new List<Sensor>();
         List<string> StrListRoom = new List<string>();
 
@@ -147,34 +136,23 @@ namespace ReportUT_
 
 
         private static string SELECT_ALL_SENSORS = "SELECT  ID_SENS, SENS_NAME, SENS_TYPE FROM S_CONDITIONAL_SENSORS     order by  ID_SENS ";
-        private static string SELECT_DAY_TIME = "select FIRST 1  tcon.id_sens , tcon.tcon_time,  tcon.tcon_temp,  tcon.tcon_hum,  tcon.tcon_pres from i_test_conditions tcon where  tcon.id_sens = "; //= ? and tcon.tcon_time >= ";
-        private static string SELECT_TYPE_NAME_SENSORS = "SELECT SENS_NAME, SENS_TYPE FROM S_CONDITIONAL_SENSORS  WHERE ID_SENS= ";
         private static string SELECT_ROOM_SENSORS = "SELECT ROOM_NAME FROM S_AMBIENT_MAP_ICO WHERE ROOM_ID = (SELECT MAP_ID FROM S_AMBIENT_MAP_THB WHERE THB_ID= ";
         static string SELECT_ALL_SENSORS_MES = "select  tcon.tcon_time,  tcon.tcon_temp,  tcon.tcon_hum,  tcon.tcon_pres,  tcon.id_sens from i_test_conditions tcon where tcon.tcon_time >=";
-        //    '1.01.2022 08:59:59'  and
-        //  tcon.tcon_time <='31.12.2022 23:59:59'
 
-
-
-        public  OdbcConnection connection;
-
+        public OdbcConnection connection;
         public OdbcConnector(string DSN_Str)
         {
- try
-            {      
-               // string connectionString = "DSN=" + IniReader.Read("DBAllias", "DB");
-         
-string connectionString = "DSN=" + DSN_Str;  //IniReader.Read("DBAllias", "DB");
-            connection = new OdbcConnection(connectionString);
-               // if (connection.DataSource == "")
-                  //   MessageBox.Show("нет подключения к БД. \nВ настройках поверьте Источник данных(DSN)");
-                
+            try
+            {
+                string connectionString = "DSN=" + DSN_Str;  //IniReader.Read("DBAllias", "DB");
+                connection = new OdbcConnection(connectionString);
             }
             catch
             {
-            if (connection.DataSource == "")
-                { MessageBox.Show("нет подключения к БД. \nВ настройках поверьте Источник данных(DSN)", "Err");
-                  return;
+                if (connection.DataSource == "")
+                {
+                    MessageBox.Show("нет подключения к БД. \nВ настройках поверьте Источник данных(DSN)", "Err");
+                    return;
                 }
             }
         }
@@ -182,38 +160,38 @@ string connectionString = "DSN=" + DSN_Str;  //IniReader.Read("DBAllias", "DB");
         {
             try
             {
-  // if (connection.DataSource!="")
-            connection.Open();
+                // if (connection.DataSource!="")
+                connection.Open();
             }
             catch
             {
                 ;
             }
-         
+
         }
         public void CloseConnection()
         {
-           // if (connection.DataSource != "")
-                connection.Close();
+            // if (connection.DataSource != "")
+            connection.Close();
         }
         public void Sens_Type_Limits()
         {
             try
             {
                 int Cnt = sensors.Count;
-                if (Cnt <= 0) return ;
+                if (Cnt <= 0) return;
 
                 for (int i = 0; i < Cnt; i++)
                 {
                     SensTo_TypeandLim(i);
                 }
 
-                return ;
+                return;
             }
             catch (InvalidCastException ex)
             {
                 this.CloseConnection();
-                Logger.GetInstanse().SetData("AllSensorsRoom", ex.Message); return ;
+                Logger.GetInstanse().SetData("AllSensorsRoom", ex.Message); return;
             }
 
         }
@@ -221,10 +199,9 @@ string connectionString = "DSN=" + DSN_Str;  //IniReader.Read("DBAllias", "DB");
         {
             int TypeSens = sensors[i].iType;
 
-                switch (TypeSens)  //sens_type = [2,             6,                 4,              8,                  12,                   14]
-                {           //type_to_name = ['UniTesS THB-1', 'UniTesS THB-1С', 'UniTesS THB-1В', 'UniTesS THB-2', 'UniTesS THB-2В', 'UniTesS THB-2С']
-             
-                
+            switch (TypeSens)  //sens_type = [2,             6,                 4,              8,                  12,                   14]
+            {           //type_to_name = ['UniTesS THB-1', 'UniTesS THB-1С', 'UniTesS THB-1В', 'UniTesS THB-2', 'UniTesS THB-2В', 'UniTesS THB-2С']
+
                 case (2):
                     sensors[i].sType = "UniTesS THB-1";
                     sensors[i].Tmax = type_to_max_temp[0].ToString();
@@ -234,7 +211,7 @@ string connectionString = "DSN=" + DSN_Str;  //IniReader.Read("DBAllias", "DB");
                     break;
                 case (6):
                     sensors[i].sType = "UniTesS THB-1C";
-                    sensors[i].Tmax = type_to_max_temp[1].ToString() ;
+                    sensors[i].Tmax = type_to_max_temp[1].ToString();
                     sensors[i].Tmin = type_to_min_temp[1].ToString();
                     sensors[i].Hmax = type_to_max_hum[1].ToString();
                     sensors[i].Hmin = type_to_min_hum[1].ToString();
@@ -275,14 +252,12 @@ string connectionString = "DSN=" + DSN_Str;  //IniReader.Read("DBAllias", "DB");
         {
             SensorMes element = new SensorMes();
             element.Id = -1000;
-            DateTime D2 = DateTime.Parse(Time1).AddHours(4); 
-
-            //D2.AddHours(1);
+            DateTime D2 = DateTime.Parse(Time1).AddHours(4);
             try
             {
                 element = new SensorMes();
                 element = Listsensor_Mes.Where(w => w.Id == id).FirstOrDefault(p => p.TimeS > DateTime.Parse(Time1)
-                &&                             p.TimeS < D2);
+                && p.TimeS < D2);
                 return element;
             }
             catch (Exception ex)
@@ -291,13 +266,11 @@ string connectionString = "DSN=" + DSN_Str;  //IniReader.Read("DBAllias", "DB");
                 element.Id = -1000;
                 return element;
             }
-           
-
         }
 
         public string Get_RoomSensorId(int id)
         {
-             string element= "";
+            string element = "";
             try
             {
                 OdbcCommand command = connection.CreateCommand();
@@ -305,7 +278,7 @@ string connectionString = "DSN=" + DSN_Str;  //IniReader.Read("DBAllias", "DB");
                 S = SELECT_ROOM_SENSORS + " " + id.ToString() + ")";
                 command.CommandText = S;
                 OdbcDataReader dataReader = command.ExecuteReader();
-                  dataReader.Read();
+                dataReader.Read();
                 if (!dataReader.HasRows)
                 {
                     element = "";
@@ -329,7 +302,7 @@ string connectionString = "DSN=" + DSN_Str;  //IniReader.Read("DBAllias", "DB");
         /// <param name="Time2"> too times for one month</param>
         /// <param name="NumOperation">  0 - only Time1; 1 - Time1,2; 3 - Month 1,2 ;</param>
         /// <returns></returns>
-        public SensorMes OneSensor(List<SensorMes> LSM, int id, string Time1, string Time2,int NumOperation,string DSN_Str)
+        public SensorMes OneSensor(List<SensorMes> LSM, int id, string Time1, string Time2, int NumOperation, string DSN_Str)
         {
 
             SensorMes Sn = new SensorMes();
@@ -340,15 +313,14 @@ string connectionString = "DSN=" + DSN_Str;  //IniReader.Read("DBAllias", "DB");
                 // _sensors = new List<Sensor>();
 
                 ODC.OpenConnection();
-                // Sn = ODC.Get_DAY_MeasurementDataIdBySensorId(id, Time1,Time2, NumOperation);
-                Sn = ODC.Get_DAY_MeasSensorId(LSM ,id, Time1, Time2, NumOperation);
+                Sn = ODC.Get_DAY_MeasSensorId(LSM, id, Time1, Time2, NumOperation);
                 ODC.CloseConnection();
                 return Sn;
             }
             catch
             {
                 this.CloseConnection();
-                return Sn; 
+                return Sn;
             }
 
         }
@@ -358,24 +330,24 @@ string connectionString = "DSN=" + DSN_Str;  //IniReader.Read("DBAllias", "DB");
 
             try
             {
-               // if (connection.DataSource == "") { MessageBox.Show("нет подключения к БД");  return sensors;  }
                 this.OpenConnection();
-                if (connection.DataSource == "") 
-                { MessageBox.Show("нет подключения к БД. \nВ настройках поверьте Источник данных(DSN)");
-                    return sensors; 
+                if (connection.DataSource == "")
+                {
+                    MessageBox.Show("нет подключения к БД. \nВ настройках проверьте Источник данных(DSN)");
+                    return sensors;
                 }
                 OdbcCommand command = connection.CreateCommand();
                 command.CommandText = SELECT_ALL_SENSORS;
-              OdbcDataReader dataReader = command.ExecuteReader();  
-                
+                OdbcDataReader dataReader = command.ExecuteReader();
+
                 sensors.Clear();
                 while (dataReader.Read())
                 {
-                        Sensor sensor = new Sensor();
-                        sensor.Id = Convert.ToInt32(dataReader[0]);
-                        sensor.Name = Convert.ToString(dataReader[1]);
-                        sensor.iType = Convert.ToInt32(dataReader[2]);
-                        sensors.Add(sensor);
+                    Sensor sensor = new Sensor();
+                    sensor.Id = Convert.ToInt32(dataReader[0]);
+                    sensor.Name = Convert.ToString(dataReader[1]);
+                    sensor.iType = Convert.ToInt32(dataReader[2]);
+                    sensors.Add(sensor);
                 }
                 this.CloseConnection();
                 return sensors;
@@ -395,11 +367,10 @@ string connectionString = "DSN=" + DSN_Str;  //IniReader.Read("DBAllias", "DB");
 
             try
             {
-               // if (connection.DataSource == "") { MessageBox.Show("нет подключения к БД"); return _sensorsMes; }
                 this.OpenConnection();
                 OdbcCommand command = connection.CreateCommand();
 
-                string S = SELECT_ALL_SENSORS_MES  +"'" + Time1 + "'" + " and tcon.tcon_time <=" + "'" + Time2 + "'" + "   order by  tcon.tcon_time"; ;
+                string S = SELECT_ALL_SENSORS_MES + "'" + Time1 + "'" + " and tcon.tcon_time <=" + "'" + Time2 + "'" + "   order by  tcon.tcon_time"; ;
 
                 command.CommandText = S;
                 OdbcDataReader dataReader = command.ExecuteReader();
@@ -410,7 +381,7 @@ string connectionString = "DSN=" + DSN_Str;  //IniReader.Read("DBAllias", "DB");
                     sensorMes.TimeS = Convert.ToDateTime(dataReader[0]);
                     sensorMes.Temperature = Convert.ToSingle(dataReader[1]);
                     sensorMes.Humidity = Convert.ToSingle(dataReader[2]);
-                    sensorMes.Pressure  = Convert.ToSingle(dataReader[3]);
+                    sensorMes.Pressure = Convert.ToSingle(dataReader[3]);
                     sensorMes.Id = Convert.ToInt32(dataReader[4]);
                     _sensorsMes.Add(sensorMes);
                 }
@@ -433,22 +404,22 @@ string connectionString = "DSN=" + DSN_Str;  //IniReader.Read("DBAllias", "DB");
         {
             try
             {
-            int Cnt = sensors.Count;
-            if (Cnt <= 0) return ;
+                int Cnt = sensors.Count;
+                if (Cnt <= 0) return;
                 StrListRoom.Clear();
-            this.OpenConnection();
-            for (int i =0; i< Cnt;i++)
-            {
+                this.OpenConnection();
+                for (int i = 0; i < Cnt; i++)
+                {
                     sensors[i].Zone = Get_RoomSensorId(sensors[i].Id);
-            }
-            this.CloseConnection();
-            return ;
+                }
+                this.CloseConnection();
+                return;
             }
             catch (InvalidCastException ex)
             {
                 this.CloseConnection();
-                Logger.GetInstanse().SetData("AllSensorsRoom", ex.Message); 
-                return ;
+                Logger.GetInstanse().SetData("AllSensorsRoom", ex.Message);
+                return;
             }
 
         }
@@ -458,36 +429,23 @@ string connectionString = "DSN=" + DSN_Str;  //IniReader.Read("DBAllias", "DB");
 
     class ReportDAYs
     {
-          public ReportDAYs()
+        public ReportDAYs()
         {
-        }    
-        
-         string T1 = DateTime.Now.ToString();
-         string T2 = DateTime.Now.ToString();
-         string M1 = DateTime.Now.ToString();
-         string M2 = DateTime.Now.ToString();
+        }
+
+        string T1 = DateTime.Now.ToString();
+        string T2 = DateTime.Now.ToString();
 
         public DateTime dateT1 = DateTime.Now;
         public DateTime dateT2 = DateTime.Now;
-        public DateTime dateM1 = DateTime.Now;
-        public DateTime dateM2 = DateTime.Now;
 
         bool bT2 = false;
         bool bM2 = false;
 
-
-     
-
-  
-
-        //int[] sens_type = { 2, 6, 4, 8, 12, 14 };
-        //string[] type_to_name = { "UniTesS THB-1", "UniTesS THB-1С", "UniTesS THB-1В", "UniTesS THB-2", "UniTesS THB-2В", "UniTesS THB-2С" };
-
         public string T11 { get => T12; set => T12 = value; }
         public string T12 { get => T1; set => T1 = value; }
         public string T21 { get => T2; set => T2 = value; }
-        public string M11 { get => M1; set => M1 = value; }
-        public string M21 { get => M2; set => M2 = value; }
+
 
         public bool BM2 { get => bM2; set => bM2 = value; }
         public bool BT21 { get => bT2; set => bT2 = value; }

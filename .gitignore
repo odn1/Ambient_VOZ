@@ -1,2 +1,21 @@
 
 Ambient_VOZ.rar
+*.cache
+*.exe
+*.CopyComplete
+*.exe
+*.pdb
+obj/Debug/ReportUT_.csproj.FileListAbsolute.txt
+obj/Debug/ReportUT_.exe
+obj/Debug/ReportUT_.pdb
+obj/Release/.NETFramework,Version=v4.5.AssemblyAttributes.cs
+obj/Release/.NETFramework,Version=v4.6.AssemblyAttributes.cs
+obj/Release/ReportUT_.csproj.FileListAbsolute.txt
+obj/Release/ReportUT_.Form1.resources
+obj/Release/ReportUT_.Properties.Resources.resources
+obj/Release/TempPE/Properties.Resources.Designer.cs.dll
+obj/Debug/ReportUT_.csproj.FileListAbsolute.txt
+obj/Debug/ReportUT_.exe
+obj/Debug/ReportUT_.pdb
+*.pdb
+*.exe

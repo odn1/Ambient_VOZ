@@ -1,17 +1,19 @@
-﻿using System;
+﻿using IniParser;
+using IniParser.Model;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+
 using System.Windows.Forms;
-
-
-
+using static System.Collections.Specialized.BitVector32;
 
 namespace ReportUT_
 {
@@ -22,16 +24,18 @@ namespace ReportUT_
         private event AddProgressEventHandler onProgress;
         private event AddProgressEventHandler onLabelText;
         private event AddProgressEventHandler onSet_End;
-  
+
 
         string Path_ini = "AmbientRepService.dat";
+
+
         private Params pl = new Params();
         private OdbcConnector p_odbcConnector;
 
         private ReportDAYs RepDAYs = new ReportDAYs();
 
         public List<Sensor> sensors = new List<Sensor>();
-  
+
         public List<SensorMes> Listsensor_Mes = new List<SensorMes>();
 
         public SensorMes pSensorMes = new SensorMes();
@@ -67,7 +71,7 @@ namespace ReportUT_
 
             dateTimePicker_Stop_Time.MaxDate = DateTime.Now;
             dateTimePicker_Stop_Time.ShowUpDown = true;
-            dateTimePicker_Stop_Time.CustomFormat = "yyyy MMMM";
+            dateTimePicker_Stop_Time.CustomFormat = "MMMM";
 
             ToolTip t = new ToolTip();
             t.SetToolTip(Button_Settings, "Настройки");
@@ -132,13 +136,13 @@ namespace ReportUT_
             DateTime dt = dateTimePicker_Start_Time.Value;
             dateTimePicker1.Value = dt;//
             dateTimePicker_Stop_Time.Value = dt;
-           // RepDAYs.M11 = dateTimePicker_Start_Time.Value.ToString();
+            // RepDAYs.M11 = dateTimePicker_Start_Time.Value.ToString();
         }
 
         private void dateTimePicker_Stop_Time_ValueChanged(object sender, EventArgs e)
         {
             DateTime dt = dateTimePicker_Stop_Time.Value;
-           // RepDAYs.M21 = dateTimePicker_Stop_Time.Value.ToString();
+            // RepDAYs.M21 = dateTimePicker_Stop_Time.Value.ToString();
         }
 
         private void Button_Reports_Click(object sender, EventArgs e)
@@ -167,20 +171,26 @@ namespace ReportUT_
             }
 
             Seril_Param();
+
             try
             {
- p_odbcConnector = new OdbcConnector(pl.DSN);
+                p_odbcConnector = new OdbcConnector(pl.DSN);
             }
             catch (Exception ex)
             {
                 Logger.GetInstanse().SetData("Get_DAY_MeasSensorId", ex.Message);
                 MessageBox.Show(ex.Message);
-                return ;
+                return;
             }
 
+
+            Button_Exec_Report.Text = "соедениение с БД";
             sensors = p_odbcConnector.AllSensors();
+            label_Count.Text = "Чтение датчиков";
             p_odbcConnector.Sens_Type_Limits();
+            label_Count.Text = "Чтение пределов";
             p_odbcConnector.AllSensorsRoom();
+            label_Count.Text = "Чтение \nместоположений";
 
             string sTime = "Время";
             string sTemp = "Температура, °C";
@@ -196,16 +206,13 @@ namespace ReportUT_
             ListStr2[0] = sHum;
             ListStr3[0] = sRespPerson;
 
-            // int iD = 3;
             string Bt = Button_Exec_Report.Text;
-
-           // Button_Exec_Report.Text = "%";
             label_Count.Focus();
 
-           // if (Moun > 0)
+            // if (Moun > 0)
             //    Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker_Stop_Time.Value.ToString());
-           // else
-           //     Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker1.Value.AddMonths(1).ToString());
+            // else
+            //     Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker1.Value.AddMonths(1).ToString());
 
             int CountSensors = sensors.Count;
             double procent = (double)(100 / ((double)CountSensors * (Moun + 1)));
@@ -215,31 +222,46 @@ namespace ReportUT_
             RepDAYs.dateT2 = dateTimePicker_2_Time.Value;
 
             #region [ Task.Run(()]
+
+
+
+
             Task.Run(() =>
-            {
-                for (int Moun_n = 0; Moun_n <= Moun; Moun_n++)
-                {
-                    Listsensor_Mes = p_odbcConnector.AllSensors_Mes(RepDAYs.dateT1.ToString(), RepDAYs.dateT1.AddMonths(1).ToString());
-                    for (int sn_n = 0; sn_n < sensors.Count; sn_n++)
-                    {
-                        One_Sens_Day(Listsensor_Mes, ListStr, ListStr1, ListStr2, ListStr3, sensors[sn_n].Id, sn_n, Moun_n);
-                        D_procent = D_procent + procent;
-                        prc = (int)D_procent;
+           {
 
-                        if (onProgress != null) onProgress(prc);
-                        if (onSet_End != null) onSet_End(sn_n);
+               try
+               {
+                   for (int Moun_n = 0; Moun_n <= Moun; Moun_n++)
+                   {
+                       Listsensor_Mes = p_odbcConnector.AllSensors_Mes(RepDAYs.dateT1.ToString(), RepDAYs.dateT1.AddMonths(1).ToString());
+                       for (int sn_n = 0; sn_n < sensors.Count; sn_n++)
+                       {
+                           One_Sens_Day(Listsensor_Mes, ListStr, ListStr1, ListStr2, ListStr3, sensors[sn_n].Id, sn_n, Moun_n);
+                           D_procent = D_procent + procent;
+                           prc = (int)D_procent;
 
-                        if (onLabelText != null) onLabelText(sn_n + 1);
-                    }
-                    if (Moun > 0)
-                    {
-                        RepDAYs.dateT1 = RepDAYs.dateT1.AddMonths(1);
-                        RepDAYs.dateT2 = RepDAYs.dateT2.AddMonths(1);
-                    }
-                    if (onProgress != null) onProgress(0);
+                           if (onProgress != null) onProgress(prc);
+                           if (onSet_End != null) onSet_End(prc);
+
+                           if (onLabelText != null) onLabelText(sn_n + 1);
+                       }
+                       if (Moun > 0)
+                       {
+                           RepDAYs.dateT1 = RepDAYs.dateT1.AddMonths(1);
+                           RepDAYs.dateT2 = RepDAYs.dateT2.AddMonths(1);
+                       }
+                       if (onProgress != null) onProgress(0);
+
+                       if (onLabelText != null) onLabelText(sensors.Count);// Button_Exec_Report.Text = "Сформировать отчет";
+                       
+                   }
+                    //   MessageBox.Show("Фомирование отчетов выполнено", "Сообщение");
                 }
-                MessageBox.Show("Фомирование отчетов выполнено", "Сообщение");
-            });
+               catch (SqlException ee)
+               {
+                   MessageBox.Show("Превышено время ожидания ответа от сервера БД " + ee.ToString());
+               }
+           });
             #endregion
             progressBar1.Value = 1;
         }
@@ -292,7 +314,7 @@ namespace ReportUT_
 
                     for (int j = 1; j <= countDays; j++)
                     {
-                        pSensorMes = p_odbcConnector.OneSensor(Listsensor_Mes, iDS, dateTm2.ToString(), dateTm2.ToString(), 0,pl.DSN);
+                        pSensorMes = p_odbcConnector.OneSensor(Listsensor_Mes, iDS, dateTm2.ToString(), dateTm2.ToString(), 0, pl.DSN);
                         if (pSensorMes != null)
                             if (pSensorMes.Id != -1000)//{valid = false; progressBar1.Value += 5; break; }
                             {
@@ -313,6 +335,7 @@ namespace ReportUT_
 
         private void Save_Day_mes(string[] ListStr, string[] ListStr1, string[] ListStr2, string[] ListStr3, string HH_mm, int num)
         {
+            if (sensors.Count == 0) return;
             SavePredator.SavePredator SP = new SavePredator.SavePredator();
             SP.Load(pl.Sample);
             var BM = SP.Bookmarks;
@@ -389,6 +412,14 @@ namespace ReportUT_
         private void Form1_Load(object sender, EventArgs e)
         {
             Deseril_Param();
+            string path = "C:\\Users\\Public\\Documents\\UniTesS\\UniTessAS.ini";
+            string Alias = "";
+            if (File.Exists(path))
+            {
+                Alias = IniReader.Read(path, "DBAlias", "UniTesS%20Ambient%20Software");
+                if (Alias != null && Alias != "")
+                    text_DSN.Text = Alias;
+            }
         }
 
         private void Deseril_Param()
@@ -461,9 +492,45 @@ namespace ReportUT_
 
         }
 
-        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        void Form1_onLabelText(int val)
         {
-            //  checkBox3.CheckState = !checkBox3.CheckState;
+            if (label_Count.InvokeRequired)
+            {
+                this.BeginInvoke(
+                    new AddProgressEventHandler(Form1_onLabelText),
+                    new object[] { val });
+            }
+            else
+            {
+                label_Count.Text = "Всего:" + sensors.Count.ToString() + " / Обработано:" + val.ToString();
+                if (val == sensors.Count )
+                {
+                    onProgress(100); Button_Exec_Report.Text = "Сформировать отчет";
+                }
+            }
+        }
+
+        private void Form1_onSet_End(int val)
+        {
+            if (Button_Exec_Report.InvokeRequired)
+            {
+                this.BeginInvoke(
+                    new AddProgressEventHandler(Form1_onSet_End),
+                    new object[] { val });
+            }
+            else
+            {
+                if (sensors.Count == 0) { Button_Exec_Report.Text = "соедениение с БД"; return; }
+                 double D = 100.0 / (sensors.Count* val+1);
+                
+                Button_Exec_Report.Text = val.ToString() + "%";
+
+                //if (val == sensors.Count-1)
+                //{
+                //    onProgress(100); Button_Exec_Report.Text = "Сформировать отчет";
+                //}
+            }
+
         }
 
         void Form1_onProgress(int val)
@@ -479,57 +546,12 @@ namespace ReportUT_
             {
                 progressBar1.Value = val;
                 if (progressBar1.Value > 98) progressBar1.Value = 0;
-
-
             }
-
-
         }
 
 
-        void Form1_onLabelText(int val)
-        {
-            if (label_Count.InvokeRequired)
-            {
-                this.BeginInvoke(
-                    new AddProgressEventHandler(Form1_onLabelText),
-                    new object[] { val });
-            }
-            else
-            {
-                label_Count.Text = "Всего:" + sensors.Count.ToString() + " / Обработано:" + val.ToString();
-
-            }
-
-
-        }
-
-        private void Form1_onSet_End(int val)
-        {
-            if (Button_Exec_Report.InvokeRequired)
-            {
-                this.BeginInvoke(
-                    new AddProgressEventHandler(Form1_onSet_End),
-                    new object[] { val });
-            }
-            else
-            {
-                Button_Exec_Report.Text = ((100 / sensors.Count) * val).ToString() + "%";
-                if (val == sensors.Count - 1)
-                {
-                    { onProgress(100); Button_Exec_Report.Text = "Сформировать отчет";
   
-                    }
-                }
-            }
 
-        }
-
-        private void panel4_Paint(object sender, PaintEventArgs e)
-        {
-
-
-        }
     }
 
 

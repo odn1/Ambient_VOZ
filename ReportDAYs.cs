@@ -9,8 +9,19 @@ using IniParser.Model;
 using System.IO;
 using System.Windows;
 
+
 namespace ReportUT_
 {
+
+    public class IniReader 
+    {
+       public static string Read(string Path1,string Key, string Section = "")
+        {
+            var parser = new FileIniDataParser();
+            IniData ini = parser.ReadFile(Path1);
+            return ini[Section][Key];
+        }
+    }
     public class Logger
     {
         #region Singlton
@@ -274,6 +285,7 @@ namespace ReportUT_
             try
             {
                 OdbcCommand command = connection.CreateCommand();
+                command.CommandTimeout = 0;
                 string S = "";
                 S = SELECT_ROOM_SENSORS + " " + id.ToString() + ")";
                 command.CommandText = S;
@@ -327,6 +339,7 @@ namespace ReportUT_
         public List<Sensor> AllSensors()
         {
             string operationMessage = "AllSensors";
+            OdbcDataReader dataReader;
 
             try
             {
@@ -337,8 +350,22 @@ namespace ReportUT_
                     return sensors;
                 }
                 OdbcCommand command = connection.CreateCommand();
+                command.CommandTimeout = 0;
                 command.CommandText = SELECT_ALL_SENSORS;
-                OdbcDataReader dataReader = command.ExecuteReader();
+                System.Threading.Thread.Sleep(3000);
+
+                try
+                {
+                     dataReader = command.ExecuteReader();
+                }
+
+                catch (Exception exe)
+                {
+                    this.CloseConnection();
+                    Logger.GetInstanse().SetData(operationMessage, exe.Message);
+                    return sensors;
+                }
+
 
                 sensors.Clear();
                 while (dataReader.Read())
@@ -369,7 +396,7 @@ namespace ReportUT_
             {
                 this.OpenConnection();
                 OdbcCommand command = connection.CreateCommand();
-
+                command.CommandTimeout = 0;
                 string S = SELECT_ALL_SENSORS_MES + "'" + Time1 + "'" + " and tcon.tcon_time <=" + "'" + Time2 + "'" + "   order by  tcon.tcon_time"; ;
 
                 command.CommandText = S;
@@ -389,7 +416,7 @@ namespace ReportUT_
                 return _sensorsMes;
             }
 
-            catch (InvalidCastException ex)
+            catch (Exception ex)
             {
                 this.CloseConnection();
                 Logger.GetInstanse().SetData(operationMessage, ex.Message);

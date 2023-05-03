@@ -170,7 +170,6 @@ namespace ReportUT_
             this.checkBox3.TabIndex = 10;
             this.checkBox3.Text = "Вкл";
             this.checkBox3.UseVisualStyleBackColor = true;
-            this.checkBox3.CheckedChanged += new System.EventHandler(this.checkBox3_CheckedChanged);
             // 
             // Button_Sample
             // 
@@ -374,7 +373,7 @@ namespace ReportUT_
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(779, 61);
             this.panel4.TabIndex = 21;
-            this.panel4.Paint += new System.Windows.Forms.PaintEventHandler(this.panel4_Paint);
+
             // 
             // label_Count
             // 
@@ -394,7 +393,7 @@ namespace ReportUT_
             this.Button_Exec_Report.Depth = 0;
             this.Button_Exec_Report.HighEmphasis = true;
             this.Button_Exec_Report.Icon = null;
-            this.Button_Exec_Report.Location = new System.Drawing.Point(257, 6);
+            this.Button_Exec_Report.Location = new System.Drawing.Point(267, 6);
             this.Button_Exec_Report.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.Button_Exec_Report.MouseState = MaterialSkin.MouseState.HOVER;
             this.Button_Exec_Report.Name = "Button_Exec_Report";
@@ -415,7 +414,7 @@ namespace ReportUT_
             this.Button_Settings.Depth = 0;
             this.Button_Settings.HighEmphasis = true;
             this.Button_Settings.Icon = ((System.Drawing.Image)(resources.GetObject("Button_Settings.Icon")));
-            this.Button_Settings.Location = new System.Drawing.Point(449, 6);
+            this.Button_Settings.Location = new System.Drawing.Point(459, 6);
             this.Button_Settings.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.Button_Settings.MouseState = MaterialSkin.MouseState.HOVER;
             this.Button_Settings.Name = "Button_Settings";

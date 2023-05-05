@@ -17,10 +17,27 @@ using static System.Collections.Specialized.BitVector32;
 
 namespace ReportUT_
 {
+
+   
+
+
     delegate void AddProgressEventHandler(int val);
 
     public partial class Form1 : Form  /// MaterialForm  
     {
+
+        public void ShowMyDialogBox(string S)
+        {
+            Ошибка testDialog = new Ошибка(S);
+             testDialog.Text = "Ошибка";
+            if (testDialog.ShowDialog(this) == DialogResult.OK)
+            {   ;
+            }
+
+            testDialog.Dispose();
+        }
+
+
         private event AddProgressEventHandler onProgress;
         private event AddProgressEventHandler onLabelText;
         private event AddProgressEventHandler onSet_End;
@@ -123,7 +140,7 @@ namespace ReportUT_
             if (dt < dateTimePicker1.Value)
             {
                 MessageBox.Show("начало периода  " + dateTimePicker1.Value.ToString() +
-   "\nне может превышать его окончание  " + dateTimePicker_2_Time.Value.ToString());
+   "\nне может превышать его окончание  " + dateTimePicker_2_Time.Value.ToString(), "Ошибка");
                 dateTimePicker_2_Time.Value = dateTimePicker1.Value;
                 return;
             }
@@ -160,9 +177,7 @@ namespace ReportUT_
         {
             int Moun = 0;
 
-            Button_Exec_Report.Text = "соедениение с БД  >>>>>>>";
- 
-
+       
             if (checkBox1.Checked)
             {
                 Moun = dateTimePicker_Stop_Time.Value.Month - dateTimePicker1.Value.Month;
@@ -172,7 +187,24 @@ namespace ReportUT_
                   "\nне может превышать конечную  " + dateTimePicker_Stop_Time.Value.ToString()); return;
                 }
             }
+
+
+
+            if (!Directory.Exists(text_Report.Text) )
+                {
+                MessageBox.Show("Нет файла или каталога:" + text_Report.Text, "Ошибка");   return;
+            }
+            if (!File.Exists(text_Sample.Text))
+            {
+                MessageBox.Show("Нет файла или каталога:" + text_Sample.Text, "Ошибка"); return;
+            }
+
+
             Seril_Param();
+
+            Button_Exec_Report.Text = "соедениение с БД  >>>>>>>";
+
+
             string sTime = "Время";
             string sTemp = "Температура, °C";
             string sHum = "Относительная влажность, %";
@@ -195,7 +227,7 @@ namespace ReportUT_
             RepDAYs.dateT2 = dateTimePicker_2_Time.Value;
             #region [ Task.Run(()]
 
-           
+ 
 
             Task.Run(() =>
            {
@@ -208,19 +240,13 @@ namespace ReportUT_
 
                    try
                    {
-                       // Button_Exec_Report.Text = "соедениение с БД  >>>>>>>";
                        p_odbcConnector = new OdbcConnector(pl.DSN);
+                       p_odbcConnector.F_DB = true;
 
                        if (onLabelText != null) onLabelText(-1);  //  label_Count.Text = "Чтение датчиков";
-
-                       // Button_Exec_Report.Text = "соедениение с БД";
                        sensors = p_odbcConnector.AllSensors();
                        p_odbcConnector.Sens_Type_Limits();
-                       //  if (onLabelText != null) onLabelText(-1);
-                       // label_Count.Text = "Чтение пределов";
                        p_odbcConnector.AllSensorsRoom();
-                       //  label_Count.Text = "Чтение \nместоположений";
-
 
                         CountSensors = sensors.Count;
                         procent = (double)(100 / ((double)CountSensors * (Moun + 1)));
@@ -240,6 +266,7 @@ namespace ReportUT_
                    for (int Moun_n = 0; Moun_n <= Moun; Moun_n++)
                    {
                        Listsensor_Mes = p_odbcConnector.AllSensors_Mes(RepDAYs.dateT1.ToString(), RepDAYs.dateT1.AddMonths(1).ToString());
+                
                        for (int sn_n = 0; sn_n < sensors.Count; sn_n++)
                        {
 
@@ -261,7 +288,17 @@ namespace ReportUT_
                        if (onLabelText != null) onLabelText(sensors.Count);// Button_Exec_Report.Text = "Сформировать отчет";
                        Application.DoEvents();
                    }
-                   //   MessageBox.Show("Фомирование отчетов выполнено", "Сообщение");
+                   if (p_odbcConnector.F_DB)
+                       MessageBox.Show("Фомирование отчетов выполнено", "Сообщение");
+                   else
+                   {
+                       Action action = () => ShowMyDialogBox("нет подключения к БД. \nВ настройках проверьте Источник данных(DSN)");
+                          if (InvokeRequired)
+                           Invoke(action);
+                       else
+                           action();
+                   }
+                   if (onSet_End != null) onSet_End(-1);// Button_Exec_Report.Text = "Сформировать отчет";
                }
                catch (SqlException ee)
                {
@@ -289,7 +326,13 @@ namespace ReportUT_
 
             for (int j = 1; j <= countDays; j++)
             {
-                pSensorMes = p_odbcConnector.OneSensor(LSM, iDS, dateTm.ToString(), dateTm2.ToString(), 0, pl.DSN);
+                //if (checkBox2.Checked)
+                //    pSensorMes = p_odbcConnector.OneSensor(LSM, iDS, dateTm.ToString(), dateTm2.ToString(), 1, pl.DSN);
+                //else 
+
+                pSensorMes = p_odbcConnector.OneSensor(LSM, iDS, dateTm.ToString(), dateTm.ToString(), 0, pl.DSN);
+
+
                 if (pSensorMes != null)
                     if (pSensorMes.Id != -1000)//{valid = false; progressBar1.Value += 5; break; }
                     {
@@ -365,7 +408,9 @@ namespace ReportUT_
 
 
             string path = text_Report.Text; //+ @"{text_Report.Text}\\Отчеты\\{RepDAYs.dateT1.Year}\\{self.month_str}";
-            path = path + "\\Отчеты\\" + RepDAYs.dateT1.Year.ToString() + "\\" + RepDAYs.dateT1.Month.ToString();
+            path = path + "\\Отчеты\\" + RepDAYs.dateT1.Year.ToString() + "\\"
+                + RepDAYs.dateT1.ToString ("MMMM") ;
+            // + RepDAYs.dateT1.Month.ToString();
 
             if (!Directory.Exists(path))
             {
@@ -516,7 +561,7 @@ namespace ReportUT_
                 }
                 if (val == sensors.Count)
                 {
-                    onProgress(100); Button_Exec_Report.Text = "Сформировать отчет";
+                    onProgress(100);  //Button_Exec_Report.Text = "Сформировать отчет";
                 }
 
             }
@@ -532,6 +577,10 @@ namespace ReportUT_
             }
             else
             {
+                if (val ==-1)
+                { Button_Exec_Report.Text = "сформировать отчеты"; return; }
+
+
                 if (sensors.Count == 0) { Button_Exec_Report.Text = "соедениение с БД"; return; }
                 double D = 100.0 / (sensors.Count * val + 1);
 

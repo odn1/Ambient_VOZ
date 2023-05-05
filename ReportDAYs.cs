@@ -134,6 +134,7 @@ namespace ReportUT_
     }
     public class OdbcConnector
     {
+       public  bool F_DB = true;   //есть соед с БД
 
         private List<SensorMes> _sensorsMes = new List<SensorMes>();
 
@@ -179,7 +180,8 @@ namespace ReportUT_
             {
                 if (connection.DataSource == "")
                 {
-                    MessageBox.Show("нет подключения к БД. \nВ настройках поверьте Источник данных(DSN)", "Err");
+                    MessageBox.Show("нет подключения к БД. \nВ настройках поверьте Источник данных(DSN)", "Ошибка");
+                    F_DB = false;
                     return;
                 }
             }
@@ -278,11 +280,20 @@ namespace ReportUT_
             }
         }
 
-        public SensorMes Get_DAY_MeasSensorId(List<SensorMes> Listsensor_Mes, int id, string Time1, string Time2, int NumOperation)
+        public SensorMes Get_DAY_MeasSensorId(List<SensorMes> Listsensor_Mes, int id, string Time1, 
+            string Time2, int NumOperation)
         {
             SensorMes element = new SensorMes();
             element.Id = -1000;
-            DateTime D2 = DateTime.Parse(Time1).AddHours(4);
+            // DateTime D2 = DateTime.Parse(Time1).AddHours(4);
+            string S1 = "";
+            {
+                string[] words = Time1.Split(' ');
+                S1 = words[0] + " 23:59:59";
+            }
+
+            DateTime D2 = DateTime.Parse(S1);
+
             try
             {
                 element = new SensorMes();
@@ -348,9 +359,12 @@ namespace ReportUT_
                 ODC.CloseConnection();
                 return Sn;
             }
-            catch
+            
+
+            catch (Exception exe)
             {
                 this.CloseConnection();
+                Logger.GetInstanse().SetData("OneSensor", exe.Message);
                 return Sn;
             }
 
@@ -362,22 +376,18 @@ namespace ReportUT_
 
             try
             {
-               //await OpenConnection();
-
-             //  connection.OpenAsync();
-
                 this.OpenConnection();
 
                 if (connection.DataSource == "")
                 {
-                    MessageBox.Show("нет подключения к БД. \nВ настройках проверьте Источник данных(DSN)");
+                   // MessageBox.Show("нет подключения к БД. \nВ настройках проверьте Источник данных(DSN)", "Ошибка");
+                    F_DB = false;
                     return sensors;
                 }
                 OdbcCommand command = connection.CreateCommand();
                 command.CommandTimeout = 0;
                 command.CommandText = SELECT_ALL_SENSORS;
                 System.Threading.Thread.Sleep(3000);
-                //Application.Current.MainWindow.DoEvents();
 
                 try
                 {

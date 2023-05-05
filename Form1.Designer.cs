@@ -94,9 +94,9 @@ namespace ReportUT_
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.label7.Location = new System.Drawing.Point(460, 6);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(220, 20);
+            this.label7.Size = new System.Drawing.Size(185, 20);
             this.label7.TabIndex = 22;
-            this.label7.Text = "Конечная дата(год,мес.)";
+            this.label7.Text = "Конечная дата(мес.)";
             // 
             // label6
             // 
@@ -326,6 +326,7 @@ namespace ReportUT_
             this.checkBox1.TabIndex = 18;
             this.checkBox1.Text = "Множество периодов";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.Visible = false;
             this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             this.checkBox1.Click += new System.EventHandler(this.materialSwitch2_CheckedChanged);
             // 
@@ -399,7 +400,7 @@ namespace ReportUT_
             this.Button_Exec_Report.NoAccentTextColor = System.Drawing.Color.Empty;
             this.Button_Exec_Report.Size = new System.Drawing.Size(184, 36);
             this.Button_Exec_Report.TabIndex = 20;
-            this.Button_Exec_Report.Text = "Сформировать отчет";
+            this.Button_Exec_Report.Text = "Сформировать отчеты";
             this.Button_Exec_Report.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.Button_Exec_Report.UseAccentColor = false;
             this.Button_Exec_Report.UseVisualStyleBackColor = true;

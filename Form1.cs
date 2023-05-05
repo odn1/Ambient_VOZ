@@ -160,6 +160,9 @@ namespace ReportUT_
         {
             int Moun = 0;
 
+            Button_Exec_Report.Text = "соедениение с БД  >>>>>>>";
+ 
+
             if (checkBox1.Checked)
             {
                 Moun = dateTimePicker_Stop_Time.Value.Month - dateTimePicker1.Value.Month;
@@ -169,29 +172,7 @@ namespace ReportUT_
                   "\nне может превышать конечную  " + dateTimePicker_Stop_Time.Value.ToString()); return;
                 }
             }
-
             Seril_Param();
-
-            try
-            {
-                p_odbcConnector = new OdbcConnector(pl.DSN);
-            }
-            catch (Exception ex)
-            {
-                Logger.GetInstanse().SetData("Get_DAY_MeasSensorId", ex.Message);
-                MessageBox.Show(ex.Message);
-                return;
-            }
-
-
-            Button_Exec_Report.Text = "соедениение с БД";
-            sensors = p_odbcConnector.AllSensors();
-            label_Count.Text = "Чтение датчиков";
-            p_odbcConnector.Sens_Type_Limits();
-            label_Count.Text = "Чтение пределов";
-            p_odbcConnector.AllSensorsRoom();
-            label_Count.Text = "Чтение \nместоположений";
-
             string sTime = "Время";
             string sTemp = "Температура, °C";
             string sHum = "Относительная влажность, %";
@@ -209,33 +190,59 @@ namespace ReportUT_
             string Bt = Button_Exec_Report.Text;
             label_Count.Focus();
 
-            // if (Moun > 0)
-            //    Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker_Stop_Time.Value.ToString());
-            // else
-            //     Listsensor_Mes = p_odbcConnector.AllSensors_Mes(dateTimePicker1.Value.ToString(), dateTimePicker1.Value.AddMonths(1).ToString());
-
-            int CountSensors = sensors.Count;
-            double procent = (double)(100 / ((double)CountSensors * (Moun + 1)));
-            double D_procent = 0;
-            int prc = 0;
+          
             RepDAYs.dateT1 = dateTimePicker1.Value;
             RepDAYs.dateT2 = dateTimePicker_2_Time.Value;
-
             #region [ Task.Run(()]
 
-
-
+           
 
             Task.Run(() =>
            {
-
+               int CountSensors ;
+               double procent ;
+               double D_procent = 0;
+               int prc = 0;
                try
                {
+
+                   try
+                   {
+                       // Button_Exec_Report.Text = "соедениение с БД  >>>>>>>";
+                       p_odbcConnector = new OdbcConnector(pl.DSN);
+
+                       if (onLabelText != null) onLabelText(-1);  //  label_Count.Text = "Чтение датчиков";
+
+                       // Button_Exec_Report.Text = "соедениение с БД";
+                       sensors = p_odbcConnector.AllSensors();
+                       p_odbcConnector.Sens_Type_Limits();
+                       //  if (onLabelText != null) onLabelText(-1);
+                       // label_Count.Text = "Чтение пределов";
+                       p_odbcConnector.AllSensorsRoom();
+                       //  label_Count.Text = "Чтение \nместоположений";
+
+
+                        CountSensors = sensors.Count;
+                        procent = (double)(100 / ((double)CountSensors * (Moun + 1)));
+                        D_procent = 0;
+                        prc = 0;
+
+                   }
+                   catch (Exception ex)
+                   {
+                       Logger.GetInstanse().SetData("Get_DAY_MeasSensorId", ex.Message);
+                       MessageBox.Show(ex.Message);
+                       return;
+                   }
+
+
+
                    for (int Moun_n = 0; Moun_n <= Moun; Moun_n++)
                    {
                        Listsensor_Mes = p_odbcConnector.AllSensors_Mes(RepDAYs.dateT1.ToString(), RepDAYs.dateT1.AddMonths(1).ToString());
                        for (int sn_n = 0; sn_n < sensors.Count; sn_n++)
                        {
+
                            One_Sens_Day(Listsensor_Mes, ListStr, ListStr1, ListStr2, ListStr3, sensors[sn_n].Id, sn_n, Moun_n);
                            D_procent = D_procent + procent;
                            prc = (int)D_procent;
@@ -251,12 +258,11 @@ namespace ReportUT_
                            RepDAYs.dateT2 = RepDAYs.dateT2.AddMonths(1);
                        }
                        if (onProgress != null) onProgress(0);
-
                        if (onLabelText != null) onLabelText(sensors.Count);// Button_Exec_Report.Text = "Сформировать отчет";
-                       
+                       Application.DoEvents();
                    }
-                    //   MessageBox.Show("Фомирование отчетов выполнено", "Сообщение");
-                }
+                   //   MessageBox.Show("Фомирование отчетов выполнено", "Сообщение");
+               }
                catch (SqlException ee)
                {
                    MessageBox.Show("Превышено время ожидания ответа от сервера БД " + ee.ToString());
@@ -503,10 +509,16 @@ namespace ReportUT_
             else
             {
                 label_Count.Text = "Всего:" + sensors.Count.ToString() + " / Обработано:" + val.ToString();
-                if (val == sensors.Count )
+
+                if (val == -1)
+                {
+                    label_Count.Text = "Чтение датчиков";
+                }
+                if (val == sensors.Count)
                 {
                     onProgress(100); Button_Exec_Report.Text = "Сформировать отчет";
                 }
+
             }
         }
 
@@ -521,8 +533,8 @@ namespace ReportUT_
             else
             {
                 if (sensors.Count == 0) { Button_Exec_Report.Text = "соедениение с БД"; return; }
-                 double D = 100.0 / (sensors.Count* val+1);
-                
+                double D = 100.0 / (sensors.Count * val + 1);
+
                 Button_Exec_Report.Text = val.ToString() + "%";
 
                 //if (val == sensors.Count-1)
@@ -544,13 +556,12 @@ namespace ReportUT_
             else
             //progressBar1.Value += ;
             {
+                if (val < progressBar1.Minimum) return;
+                if (val > progressBar1.Maximum) return;
                 progressBar1.Value = val;
                 if (progressBar1.Value > 98) progressBar1.Value = 0;
             }
         }
-
-
-  
 
     }
 

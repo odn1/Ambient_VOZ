@@ -150,7 +150,24 @@ namespace ReportUT_
         private static string SELECT_ROOM_SENSORS = "SELECT ROOM_NAME FROM S_AMBIENT_MAP_ICO WHERE ROOM_ID = (SELECT MAP_ID FROM S_AMBIENT_MAP_THB WHERE THB_ID= ";
         static string SELECT_ALL_SENSORS_MES = "select  tcon.tcon_time,  tcon.tcon_temp,  tcon.tcon_hum,  tcon.tcon_pres,  tcon.id_sens from i_test_conditions tcon where tcon.tcon_time >=";
 
-        public OdbcConnection connection;
+        public static OdbcConnection connection;
+
+        private static async Task ConnectWithDB(OdbcConnection connection )
+        {
+            //    string connectionString = @"Data Source=.\SQLEXPRESS;Initial Catalog=usersdb;Integrated Security=True";
+
+            //    //   using (SqlConnection connection = new SqlConnection(connectionString))
+            //    using (OdbcConnection connection = new OdbcConnection(connectionString))
+            //    {
+            await connection.OpenAsync();
+        //        Console.WriteLine("Подключение открыто");
+        //    }
+        //    Console.WriteLine("Подключение закрыто...");
+        }
+
+
+
+
         public OdbcConnector(string DSN_Str)
         {
             try
@@ -167,11 +184,13 @@ namespace ReportUT_
                 }
             }
         }
-        public void OpenConnection()
+        public   void OpenConnection()
         {
             try
             {
                 // if (connection.DataSource!="")
+
+            // connection.OpenAsync();
                 connection.Open();
             }
             catch
@@ -343,7 +362,12 @@ namespace ReportUT_
 
             try
             {
+               //await OpenConnection();
+
+             //  connection.OpenAsync();
+
                 this.OpenConnection();
+
                 if (connection.DataSource == "")
                 {
                     MessageBox.Show("нет подключения к БД. \nВ настройках проверьте Источник данных(DSN)");
@@ -353,6 +377,7 @@ namespace ReportUT_
                 command.CommandTimeout = 0;
                 command.CommandText = SELECT_ALL_SENSORS;
                 System.Threading.Thread.Sleep(3000);
+                //Application.Current.MainWindow.DoEvents();
 
                 try
                 {

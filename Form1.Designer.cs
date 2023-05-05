@@ -137,7 +137,7 @@ namespace ReportUT_
             this.progressBar1.Location = new System.Drawing.Point(0, 0);
             this.progressBar1.Maximum = 110;
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(784, 2);
+            this.progressBar1.Size = new System.Drawing.Size(784, 5);
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.progressBar1.TabIndex = 18;
             // 
@@ -373,7 +373,6 @@ namespace ReportUT_
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(779, 61);
             this.panel4.TabIndex = 21;
-
             // 
             // label_Count
             // 
@@ -439,7 +438,7 @@ namespace ReportUT_
             this.tableLayoutPanel1.Controls.Add(this.panel4, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.panel3, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 2);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 5);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());

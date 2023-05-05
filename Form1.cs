@@ -98,6 +98,7 @@ namespace ReportUT_
         private void materialSwitch1_CheckedChanged(object sender, EventArgs e)
         {
             dateTimePicker_2_Time.Visible = (!dateTimePicker_2_Time.Visible);
+            if (Control.ModifierKeys == Keys.Control) checkBox1.Visible = true;
         }
 
 

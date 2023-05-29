@@ -21,7 +21,7 @@ namespace AmbientService.src.utils
         //{
         //    var RetVal = new StringBuilder(255);
         //    GetPrivateProfileString(Section ?? EXE, Key, "", RetVal, 255, Path);
-        //    return RetVal.ToString();
+        //    return RetVal.ToString("#.#");
         //}
 
         //public static void Write(string Key, string Value, string Section = null)

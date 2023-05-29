@@ -236,45 +236,45 @@ namespace ReportUT_
 
                 case (2):
                     sensors[i].sType = "UniTesS THB-1";
-                    sensors[i].Tmax = type_to_max_temp[0].ToString();
-                    sensors[i].Tmin = type_to_min_temp[0].ToString();
-                    sensors[i].Hmax = type_to_max_hum[0].ToString();
-                    sensors[i].Hmin = type_to_min_hum[0].ToString();
+                    sensors[i].Tmax = type_to_max_temp[0].ToString("#.#");
+                    sensors[i].Tmin = type_to_min_temp[0].ToString("#.#");
+                    sensors[i].Hmax = type_to_max_hum[0].ToString("#.#");
+                    sensors[i].Hmin = type_to_min_hum[0].ToString("#.#");
                     break;
                 case (6):
                     sensors[i].sType = "UniTesS THB-1C";
-                    sensors[i].Tmax = type_to_max_temp[1].ToString();
-                    sensors[i].Tmin = type_to_min_temp[1].ToString();
-                    sensors[i].Hmax = type_to_max_hum[1].ToString();
-                    sensors[i].Hmin = type_to_min_hum[1].ToString();
+                    sensors[i].Tmax = type_to_max_temp[1].ToString("#.#");
+                    sensors[i].Tmin = type_to_min_temp[1].ToString("#.#");
+                    sensors[i].Hmax = type_to_max_hum[1].ToString("#.#");
+                    sensors[i].Hmin = type_to_min_hum[1].ToString("#.#");
                     break;
                 case (4):
                     sensors[i].sType = "UniTesS THB-1B";
-                    sensors[i].Tmax = type_to_max_temp[2].ToString();
-                    sensors[i].Tmin = type_to_min_temp[2].ToString();
-                    sensors[i].Hmax = type_to_max_hum[2].ToString();
-                    sensors[i].Hmin = type_to_min_hum[2].ToString();
+                    sensors[i].Tmax = type_to_max_temp[2].ToString("#.#");
+                    sensors[i].Tmin = type_to_min_temp[2].ToString("#.#");
+                    sensors[i].Hmax = type_to_max_hum[2].ToString("#.#");
+                    sensors[i].Hmin = type_to_min_hum[2].ToString("#.#");
                     break;
                 case (8):
                     sensors[i].sType = "UniTesS THB-2";
-                    sensors[i].Tmax = type_to_max_temp[3].ToString();
-                    sensors[i].Tmin = type_to_min_temp[3].ToString();
-                    sensors[i].Hmax = type_to_max_hum[3].ToString();
-                    sensors[i].Hmin = type_to_min_hum[3].ToString();
+                    sensors[i].Tmax = type_to_max_temp[3].ToString("#.#");
+                    sensors[i].Tmin = type_to_min_temp[3].ToString("#.#");
+                    sensors[i].Hmax = type_to_max_hum[3].ToString("#.#");
+                    sensors[i].Hmin = type_to_min_hum[3].ToString("#.#");
                     break;
                 case (12):
                     sensors[i].sType = "UniTesS THB-2B";
-                    sensors[i].Tmax = type_to_max_temp[4].ToString();
-                    sensors[i].Tmin = type_to_min_temp[4].ToString();
-                    sensors[i].Hmax = type_to_max_hum[4].ToString();
-                    sensors[i].Hmin = type_to_min_hum[4].ToString();
+                    sensors[i].Tmax = type_to_max_temp[4].ToString("#.#");
+                    sensors[i].Tmin = type_to_min_temp[4].ToString("#.#");
+                    sensors[i].Hmax = type_to_max_hum[4].ToString("#.#");
+                    sensors[i].Hmin = type_to_min_hum[4].ToString("#.#");
                     break;
                 case (14):
                     sensors[i].sType = "UniTesS THB-2C";
-                    sensors[i].Tmax = type_to_max_temp[5].ToString();
-                    sensors[i].Tmin = type_to_min_temp[5].ToString();
-                    sensors[i].Hmax = type_to_max_hum[5].ToString();
-                    sensors[i].Hmin = type_to_min_hum[5].ToString();
+                    sensors[i].Tmax = type_to_max_temp[5].ToString("#.#");
+                    sensors[i].Tmin = type_to_min_temp[5].ToString("#.#");
+                    sensors[i].Hmax = type_to_max_hum[5].ToString("#.#");
+                    sensors[i].Hmin = type_to_min_hum[5].ToString("#.#");
                     break;
 
             }

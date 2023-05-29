@@ -322,24 +322,21 @@ namespace ReportUT_
             { ListStr[i] = ListStr1[i] = ListStr2[i] = ""; }
 
             int countDays = System.DateTime.DaysInMonth(dateTm.Year, dateTm.Month);
-            string HH_mm = dateTm.ToString(" HHч mmмин ");     // "_" + dateTm.Hour.ToString() + "_" + dateTm.Minute.ToString();
+            string HH_mm = dateTm.ToString(" HHч mmмин ");    
 
 
             for (int j = 1; j <= countDays; j++)
             {
-                //if (checkBox2.Checked)
-                //    pSensorMes = p_odbcConnector.OneSensor(LSM, iDS, dateTm.ToString(), dateTm2.ToString(), 1, pl.DSN);
-                //else 
-
+               
                 pSensorMes = p_odbcConnector.OneSensor(LSM, iDS, dateTm.ToString(), dateTm.ToString(), 0, pl.DSN);
 
 
                 if (pSensorMes != null)
-                    if (pSensorMes.Id != -1000)//{valid = false; progressBar1.Value += 5; break; }
+                    if (pSensorMes.Id != -1000)
                     {
                         ListStr[j] = pSensorMes.TimeS.ToString("HH:mm"); // ();  //   //
-                        ListStr1[j] = pSensorMes.Temperature.ToString();
-                        ListStr2[j] = pSensorMes.Humidity.ToString();
+                        ListStr1[j] = pSensorMes.Temperature.ToString("#.#");
+                        ListStr2[j] = pSensorMes.Humidity.ToString("#.#");
                     }
                     else
                     {
@@ -347,7 +344,7 @@ namespace ReportUT_
                     }
 
                 dateTm = dateTm.AddDays(1);
-                // if (checkBox2.Checked) dateTm2 = dateTm2.AddDays(1);
+                
             }
             Save_Day_mes(ListStr, ListStr1, ListStr2, ListStr3, HH_mm, numS);
 
@@ -360,17 +357,17 @@ namespace ReportUT_
                     { ListStr[i] = ListStr1[i] = ListStr2[i] = ""; }
 
                     countDays = System.DateTime.DaysInMonth(dateTm2.Year, dateTm2.Month);
-                    HH_mm = dateTm2.ToString(" HHч mmмин "); ;// "_" + dateTm.Hour.ToString() + "_" + dateTm.Minute.ToString();
+                    HH_mm = dateTm2.ToString(" HHч mmмин "); 
 
                     for (int j = 1; j <= countDays; j++)
                     {
                         pSensorMes = p_odbcConnector.OneSensor(Listsensor_Mes, iDS, dateTm2.ToString(), dateTm2.ToString(), 0, pl.DSN);
                         if (pSensorMes != null)
-                            if (pSensorMes.Id != -1000)//{valid = false; progressBar1.Value += 5; break; }
+                            if (pSensorMes.Id != -1000)
                             {
                                 ListStr[j] = pSensorMes.TimeS.ToString("HH:mm"); //();  //   
-                                ListStr1[j] = pSensorMes.Temperature.ToString();
-                                ListStr2[j] = pSensorMes.Humidity.ToString();
+                                ListStr1[j] = pSensorMes.Temperature.ToString("#.#");
+                                ListStr2[j] = pSensorMes.Humidity.ToString("#.#");
                             }
                             else
                             {

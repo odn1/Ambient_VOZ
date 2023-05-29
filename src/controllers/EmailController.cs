@@ -133,7 +133,7 @@ namespace AmbientService.src.controllers
             } 
             catch (Exception ex )
             {
-
+                Console.WriteLine(ex.ToString());
             }
         }
     }

@@ -42,8 +42,9 @@ namespace ReportUT_
         private event AddProgressEventHandler onLabelText;
         private event AddProgressEventHandler onSet_End;
 
-
-        string Path_ini = "AmbientRepService.dat";
+        //string SS = Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments);
+        string Path_ini = Environment.GetFolderPath(Environment.SpecialFolder.CommonDocuments) +
+            "\\UniTesS\\AmbientRepService.dat";
 
 
         private Params pl = new Params();
@@ -193,11 +194,11 @@ namespace ReportUT_
 
             if (!Directory.Exists(text_Report.Text) )
                 {
-                MessageBox.Show("Нет файла или каталога:" + text_Report.Text, "Ошибка");   return;
+                MessageBox.Show("Нет каталога для вывода отчетов:" + text_Report.Text, "Ошибка");   return;
             }
             if (!File.Exists(text_Sample.Text))
             {
-                MessageBox.Show("Нет файла или каталога:" + text_Sample.Text, "Ошибка"); return;
+                MessageBox.Show("Нет файла   для шаблона:" + text_Sample.Text, "Ошибка"); return;
             }
 
 

@@ -14,7 +14,7 @@ namespace AmbientService.src.utils
         }
         #endregion
 
-        private string logPath = "Log.txt";
+        private string logPath = "C:\\Users\\Public\\Documents\\UniTesS\\UT_Report_Log.txt";
         private long maximumSize = 10485760;
 
         private Logger()

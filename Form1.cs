@@ -481,6 +481,9 @@ namespace ReportUT_
                 if (Alias != null && Alias != "")
                     text_DSN.Text = Alias;
             }
+            string logPath = "C:\\Users\\Public\\Documents\\UniTesS\\UT_Report_Log.txt";
+            File.Create(logPath).Close();
+
         }
 
         private void Deseril_Param()

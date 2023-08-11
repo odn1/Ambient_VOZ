@@ -12,7 +12,6 @@ using System.Windows;
 
 namespace ReportUT_
 {
-
     public class IniReader 
     {
        public static string Read(string Path1,string Key, string Section = "")
@@ -26,14 +25,13 @@ namespace ReportUT_
     {
         #region Singlton
         private static Logger instanse;
-
-        public static Logger GetInstanse()
+       public static Logger GetInstanse()
         {
             return instanse is null ? instanse = new Logger() : instanse;
         }
         #endregion
 
-        private string logPath = "Log.txt";
+        private string logPath = "C:\\Users\\Public\\Documents\\UniTesS\\UT_Report_Log.txt";
         private long maximumSize = 104857;
 
         private Logger()
@@ -51,6 +49,15 @@ namespace ReportUT_
             using (StreamWriter writer = new StreamWriter(logPath, SizeIsCorrect()))
             {
                 writer.WriteLine(text);
+            }
+        }
+
+        private void Write_Clear_File(string text)
+        {
+            using (StreamWriter writer = new StreamWriter(logPath, SizeIsCorrect()))
+            {
+                File.WriteAllText(@"имя_файла.txt", string.Empty);
+
             }
         }
 

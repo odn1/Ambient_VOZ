@@ -337,8 +337,8 @@ namespace ReportUT_
                         if (pSensorMes.Id != -1000)
                         {
                             ListStr[j] = pSensorMes.TimeS.ToString("HH:mm"); // ();  //   //
-                            ListStr1[j] = pSensorMes.Temperature.ToString("#.#");
-                            ListStr2[j] = pSensorMes.Humidity.ToString("#.#");
+                            ListStr1[j] = pSensorMes.Temperature.ToString("0.0");
+                            ListStr2[j] = pSensorMes.Humidity.ToString("0.0");
                         }
                         else
                         {
@@ -369,8 +369,8 @@ namespace ReportUT_
                                 if (pSensorMes.Id != -1000)
                                 {
                                     ListStr[j] = pSensorMes.TimeS.ToString("HH:mm"); //();  //   
-                                    ListStr1[j] = pSensorMes.Temperature.ToString("#.#");
-                                    ListStr2[j] = pSensorMes.Humidity.ToString("#.#");
+                                    ListStr1[j] = pSensorMes.Temperature.ToString("0.0");
+                                    ListStr2[j] = pSensorMes.Humidity.ToString("0.0");
                                 }
                                 else
                                 {

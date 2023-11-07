@@ -1,4 +1,1 @@
-29.05.2023 17:26:54 || AllSensors_Mes||ERROR [HY000] [ODBC Firebird Driver][Firebird]conversion error from string "#.#"
-10.08.2023 14:07:44 || One_Sens_Day||Не удалось найти часть пути "C:\Users\Public\Desktop\Отчеты\Отчеты\2023\Август\UniTesS THB-1C п\о1г 14ч 07мин .docx".
-10.08.2023 14:14:02 || One_Sens_Day||Не удалось найти часть пути "C:\Users\Public\Desktop\Отчеты\Отчеты\2023\Август\UniTesS THB-1C п\о2г 14ч 07мин .docx".
-10.08.2023 14:14:21 || One_Sens_Day||Не удалось найти часть пути "C:\Users\Public\Desktop\Отчеты\Отчеты\2023\Август\UniTesS THB-1C п\о2х 14ч 07мин .docx".
+

@@ -241,6 +241,14 @@ namespace ReportUT_
             switch (TypeSens)  //sens_type = [2,             6,                 4,              8,                  12,                   14]
             {           //type_to_name = ['UniTesS THB-1', 'UniTesS THB-1С', 'UniTesS THB-1В', 'UniTesS THB-2', 'UniTesS THB-2В', 'UniTesS THB-2С']
 
+
+                default:
+                    sensors[i].sType = "UniTesS THB-1";
+                    sensors[i].Tmax = type_to_max_temp[0].ToString("0.0");
+                    sensors[i].Tmin = type_to_min_temp[0].ToString("0.0");
+                    sensors[i].Hmax = type_to_max_hum[0].ToString("0.0");
+                    sensors[i].Hmin = type_to_min_hum[0].ToString("0.0");
+                    break;
                 case (2):
                     sensors[i].sType = "UniTesS THB-1";
                     sensors[i].Tmax = type_to_max_temp[0].ToString("0.0");

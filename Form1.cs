@@ -404,16 +404,25 @@ namespace ReportUT_
 
             SP.BM_Insert_Str("t_min", sensors[num].Tmin);
             SP.BM_Insert_Str("t_max", sensors[num].Tmax);
-            SP.BM_Insert_Str("h_min", sensors[num].Hmin);
-            SP.BM_Insert_Str("h_max", sensors[num].Hmax);
+
+           
+
+
             SP.BM_Insert_Str("sens_name", sensors[num].sType + " " + sensors[num].Name);
             SP.BM_Insert_Str("data_meas", RepDAYs.dateT1.ToString("MMMM, yyyy"));
 
             SP.BM_Insert_Line("HUM_TABLE", ListStr);
             SP.BM_Insert_Line("HUM_TABLE", ListStr1);
-            SP.BM_Insert_Line("HUM_TABLE", ListStr2);
 
+            // с влажностью
+            if (sensors[num].iType == 8 || sensors[num].iType == 6 || sensors[num].iType == 4 || sensors[num].iType == 2)
+            {
+                SP.BM_Insert_Str("h_min", sensors[num].Hmin);
+                SP.BM_Insert_Str("h_max", sensors[num].Hmax);
+                SP.BM_Insert_Line("HUM_TABLE", ListStr2);
+            }
             SP.BM_Insert_Line("HUM_TABLE", ListStr3);
+
             SP.BM_Delete_Last_Row(new String[] { "HUM_TABLE" });
 
 

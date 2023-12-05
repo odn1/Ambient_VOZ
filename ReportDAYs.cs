@@ -240,7 +240,13 @@ namespace ReportUT_
 
             switch (TypeSens)  //sens_type = [2,             6,                 4,              8,                  12,                   14]
             {           //type_to_name = ['UniTesS THB-1', 'UniTesS THB-1С', 'UniTesS THB-1В', 'UniTesS THB-2', 'UniTesS THB-2В', 'UniTesS THB-2С']
-
+ // if (sens.type == TYPE_THB2 || sens.type == TYPE_THB1C ||  //      sens.type == TYPE_THB1 || sens.type == TYPE_THB1B)  HUM
+//#define TYPE_THB1       0x02
+//#define TYPE_THB1B      0x04
+//#define TYPE_THB1C      0x06
+//#define TYPE_THB2       0x08
+//#define TYPE_THB2B      0x0C
+//#define TYPE_THB2C      0x0E
 
                 default:
                     sensors[i].sType = "UniTesS THB-1";
@@ -281,15 +287,15 @@ namespace ReportUT_
                     sensors[i].sType = "UniTesS THB-2B";
                     sensors[i].Tmax = type_to_max_temp[4].ToString("0.0");
                     sensors[i].Tmin = type_to_min_temp[4].ToString("0.0");
-                    sensors[i].Hmax = type_to_max_hum[4].ToString("0.0");
-                    sensors[i].Hmin = type_to_min_hum[4].ToString("0.0");
+                  //  sensors[i].Hmax = type_to_max_hum[4].ToString("0.0");
+                  //  sensors[i].Hmin = type_to_min_hum[4].ToString("0.0");
                     break;
                 case (14):
                     sensors[i].sType = "UniTesS THB-2C";
                     sensors[i].Tmax = type_to_max_temp[5].ToString("0.0");
                     sensors[i].Tmin = type_to_min_temp[5].ToString("0.0");
-                    sensors[i].Hmax = type_to_max_hum[5].ToString("0.0");
-                    sensors[i].Hmin = type_to_min_hum[5].ToString("0.0");
+                   // sensors[i].Hmax = type_to_max_hum[5].ToString("0.0");
+                   // sensors[i].Hmin = type_to_min_hum[5].ToString("0.0");
                     break;
 
             }

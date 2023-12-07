@@ -103,7 +103,7 @@ namespace ReportUT_
         {
             set
             {
-                temperature = value == -127 || value == 127 ? float.NaN : value;
+                temperature = value == -127.0 || value == 127.0 ? float.NaN : value;
             }
             get
             {
@@ -116,7 +116,7 @@ namespace ReportUT_
         {
             set
             {
-                humidity = value == -127 || value == 127 ? float.NaN : value;
+                humidity = value == -127.0 || value == 127.0 ? float.NaN : value;
             }
             get
             {
@@ -129,7 +129,7 @@ namespace ReportUT_
         {
             set
             {
-                pressure = value == -127 || value == 127 ? float.NaN : value;
+                pressure = value == -127.0 || value == 127.0 ? float.NaN : value;
             }
             get
             {
@@ -461,11 +461,17 @@ namespace ReportUT_
                 while (dataReader.Read())
                 {
                     SensorMes sensorMes = new SensorMes();
-                    sensorMes.TimeS = Convert.ToDateTime(dataReader[0]);
-                    sensorMes.Temperature = Convert.ToSingle(dataReader[1]);
-                    sensorMes.Humidity = Convert.ToSingle(dataReader[2]);
-                    sensorMes.Pressure = Convert.ToSingle(dataReader[3]);
-                    sensorMes.Id = Convert.ToInt32(dataReader[4]);
+                    if (dataReader[0] != DBNull.Value)
+                        sensorMes.TimeS = Convert.ToDateTime(dataReader[0]);
+                   Logger.GetInstanse().SetData(sensorMes.TimeS.ToString(), dataReader[1].ToString() );
+                    if (dataReader[1] != DBNull.Value)
+                        sensorMes.Temperature = Convert.ToSingle(dataReader[1]);
+                    if (dataReader[2] != DBNull.Value)
+                        sensorMes.Humidity = Convert.ToSingle(dataReader[2]);
+                    if (dataReader[3] != DBNull.Value)
+                        sensorMes.Pressure = Convert.ToSingle(dataReader[3]);
+                    if (dataReader[4] != DBNull.Value)
+                        sensorMes.Id = Convert.ToInt32(dataReader[4]);
                     _sensorsMes.Add(sensorMes);
                 }
                 this.CloseConnection();

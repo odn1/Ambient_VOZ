@@ -21,8 +21,11 @@ namespace AmbientService.src.models
                 element.Id = Convert.ToInt32(reader[0]);
 
                 element.Temperature = (float)Convert.ToDouble(reader[1]);
+
+
                 element.MinTemperature = (float)Convert.ToDouble(reader[2]);
                 element.MaxTemperature = (float)Convert.ToDouble(reader[3]);
+
 
                 element.Humidity = (float)Convert.ToDouble(reader[4]);
                 element.MinHumidity = (float)Convert.ToDouble(reader[5]);

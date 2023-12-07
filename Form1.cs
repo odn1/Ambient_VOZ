@@ -228,9 +228,7 @@ namespace ReportUT_
             RepDAYs.dateT1 = dateTimePicker1.Value;
             RepDAYs.dateT2 = dateTimePicker_2_Time.Value;
             #region [ Task.Run(()]
-
- 
-
+     
             Task.Run(() =>
            {
                int CountSensors ;
@@ -292,7 +290,11 @@ namespace ReportUT_
                        Application.DoEvents();
                    }
                    if (p_odbcConnector.F_DB)
+                   {
+                       onProgress(100);
                        MessageBox.Show("Фомирование отчетов выполнено", "Сообщение");
+                   }    
+                       
                    else
                    {
                        Action action = () => ShowMyDialogBox("нет подключения к БД. \nВ настройках проверьте Источник данных(DSN)");
@@ -337,7 +339,11 @@ namespace ReportUT_
                         if (pSensorMes.Id != -1000)
                         {
                             ListStr[j] = pSensorMes.TimeS.ToString("HH:mm"); // ();  //   //
-                            ListStr1[j] = pSensorMes.Temperature.ToString("0.0");
+                            if (float.IsNaN(pSensorMes.Temperature))
+                            ListStr1[j] = "N/A";
+                           else 
+                                ListStr1[j] = pSensorMes.Temperature.ToString("0.0");
+
                             ListStr2[j] = pSensorMes.Humidity.ToString("0.0");
                         }
                         else
@@ -368,8 +374,11 @@ namespace ReportUT_
                             if (pSensorMes != null)
                                 if (pSensorMes.Id != -1000)
                                 {
-                                    ListStr[j] = pSensorMes.TimeS.ToString("HH:mm"); //();  //   
-                                    ListStr1[j] = pSensorMes.Temperature.ToString("0.0");
+                                    ListStr[j] = pSensorMes.TimeS.ToString("HH:mm"); //();  //
+                                    if (float.IsNaN(pSensorMes.Temperature))
+                                        ListStr1[j] = "N/A";
+                                           else
+                                            ListStr1[j] = pSensorMes.Temperature.ToString("0.0");
                                     ListStr2[j] = pSensorMes.Humidity.ToString("0.0");
                                 }
                                 else
@@ -404,14 +413,12 @@ namespace ReportUT_
 
             SP.BM_Insert_Str("t_min", sensors[num].Tmin);
             SP.BM_Insert_Str("t_max", sensors[num].Tmax);
-
-           
-
-
+ 
             SP.BM_Insert_Str("sens_name", sensors[num].sType + " " + sensors[num].Name);
             SP.BM_Insert_Str("data_meas", RepDAYs.dateT1.ToString("MMMM, yyyy"));
 
             SP.BM_Insert_Line("HUM_TABLE", ListStr);
+
             SP.BM_Insert_Line("HUM_TABLE", ListStr1);
 
             // с влажностью

@@ -344,7 +344,10 @@ namespace ReportUT_
                            else 
                                 ListStr1[j] = pSensorMes.Temperature.ToString("0.0");
 
-                            ListStr2[j] = pSensorMes.Humidity.ToString("0.0");
+                            if (float.IsNaN(pSensorMes.Humidity))
+                                ListStr2[j] = "N/A";
+                            else
+                                ListStr2[j] = pSensorMes.Humidity.ToString("0.0");
                         }
                         else
                         {
@@ -356,6 +359,8 @@ namespace ReportUT_
                 }
 
                 Save_Day_mes(ListStr, ListStr1, ListStr2, ListStr3, HH_mm, numS);
+
+
 
                 dateTm = RepDAYs.dateT1;
                 dateTm2 = RepDAYs.dateT2;
@@ -379,7 +384,12 @@ namespace ReportUT_
                                         ListStr1[j] = "N/A";
                                            else
                                             ListStr1[j] = pSensorMes.Temperature.ToString("0.0");
-                                    ListStr2[j] = pSensorMes.Humidity.ToString("0.0");
+
+                                    if (float.IsNaN(pSensorMes.Humidity))
+                                        ListStr2[j] = "N/A";
+                                    else
+                                        ListStr2[j] = pSensorMes.Humidity.ToString("0.0");
+                                  
                                 }
                                 else
                                 {
@@ -404,6 +414,14 @@ namespace ReportUT_
         private void Save_Day_mes(string[] ListStr, string[] ListStr1, string[] ListStr2, string[] ListStr3, string HH_mm, int num)
         {
             if (sensors.Count == 0) return;
+            int k = 0;
+            for (int i =1; i< ListStr.Length;i++)
+            {
+                if (ListStr[i] != "")
+                    k++;
+            }
+if (k==0)                   return;
+
             SavePredator.SavePredator SP = new SavePredator.SavePredator();
             SP.Load(pl.Sample);
             var BM = SP.Bookmarks;

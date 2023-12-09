@@ -187,7 +187,7 @@ namespace ReportUT_
             {
                 if (connection.DataSource == "")
                 {
-                    MessageBox.Show("нет подключения к БД. \nВ настройках поверьте Источник данных(DSN)", "Ошибка");
+                    MessageBox.Show("нет подключения к БД. \nВ настройках проверьте Источник данных(DSN)", "Ошибка");
                     F_DB = false;
                     return;
                 }

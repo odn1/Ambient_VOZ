@@ -194,11 +194,15 @@ namespace ReportUT_
 
             if (!Directory.Exists(text_Report.Text) )
                 {
-                MessageBox.Show("Нет каталога для вывода отчетов:" + text_Report.Text, "Ошибка");   return;
+                MessageBox.Show("Нет каталога для вывода отчетов:" + text_Report.Text, "Ошибка");
+                panel2.Visible = true;
+                return;
             }
             if (!File.Exists(text_Sample.Text))
             {
-                MessageBox.Show("Нет файла   для шаблона:" + text_Sample.Text, "Ошибка"); return;
+                MessageBox.Show("Нет файла   для шаблона:" + text_Sample.Text, "Ошибка");
+                panel2.Visible = true;
+                return;
             }
 
 
@@ -292,6 +296,7 @@ namespace ReportUT_
                    if (p_odbcConnector.F_DB)
                    {
                        onProgress(100);
+                       Application.DoEvents();
                        MessageBox.Show("Фомирование отчетов выполнено", "Сообщение");
                    }    
                        

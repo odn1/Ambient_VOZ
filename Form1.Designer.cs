@@ -237,6 +237,8 @@ namespace ReportUT_
             this.text_Sample.Name = "text_Sample";
             this.text_Sample.Size = new System.Drawing.Size(465, 26);
             this.text_Sample.TabIndex = 5;
+            this.text_Sample.Text = "C:\\Program Files (x86)\\Ambient Viewer\\ReportGen\\карта_температуры_и_влажности_Юни" +
+    "тесс.docx";
             // 
             // label4
             // 

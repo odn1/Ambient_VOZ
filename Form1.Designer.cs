@@ -68,6 +68,9 @@ namespace ReportUT_
             this.Button_Exec_Report = new MaterialSkin.Controls.MaterialButton();
             this.Button_Settings = new MaterialSkin.Controls.MaterialButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.text_Date_POV = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -144,6 +147,9 @@ namespace ReportUT_
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.panel2.Controls.Add(this.checkBox4);
+            this.panel2.Controls.Add(this.text_Date_POV);
+            this.panel2.Controls.Add(this.label8);
             this.panel2.Controls.Add(this.checkBox3);
             this.panel2.Controls.Add(this.Button_Sample);
             this.panel2.Controls.Add(this.Button_Reports);
@@ -157,16 +163,16 @@ namespace ReportUT_
             this.panel2.Controls.Add(this.label1);
             this.panel2.Location = new System.Drawing.Point(3, 181);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(779, 178);
+            this.panel2.Size = new System.Drawing.Size(779, 216);
             this.panel2.TabIndex = 19;
             this.panel2.Visible = false;
             // 
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(705, 12);
+            this.checkBox3.Location = new System.Drawing.Point(708, 18);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(51, 20);
+            this.checkBox3.Size = new System.Drawing.Size(50, 20);
             this.checkBox3.TabIndex = 10;
             this.checkBox3.Text = "Вкл";
             this.checkBox3.UseVisualStyleBackColor = true;
@@ -179,7 +185,7 @@ namespace ReportUT_
             this.Button_Sample.Depth = 0;
             this.Button_Sample.HighEmphasis = true;
             this.Button_Sample.Icon = ((System.Drawing.Image)(resources.GetObject("Button_Sample.Icon")));
-            this.Button_Sample.Location = new System.Drawing.Point(705, 131);
+            this.Button_Sample.Location = new System.Drawing.Point(705, 176);
             this.Button_Sample.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.Button_Sample.MouseState = MaterialSkin.MouseState.HOVER;
             this.Button_Sample.Name = "Button_Sample";
@@ -201,7 +207,7 @@ namespace ReportUT_
             this.Button_Reports.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Button_Reports.HighEmphasis = true;
             this.Button_Reports.Icon = ((System.Drawing.Image)(resources.GetObject("Button_Reports.Icon")));
-            this.Button_Reports.Location = new System.Drawing.Point(705, 90);
+            this.Button_Reports.Location = new System.Drawing.Point(705, 135);
             this.Button_Reports.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.Button_Reports.MouseState = MaterialSkin.MouseState.HOVER;
             this.Button_Reports.Name = "Button_Reports";
@@ -217,7 +223,7 @@ namespace ReportUT_
             // text_DSN
             // 
             this.text_DSN.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.text_DSN.Location = new System.Drawing.Point(234, 49);
+            this.text_DSN.Location = new System.Drawing.Point(234, 94);
             this.text_DSN.Name = "text_DSN";
             this.text_DSN.Size = new System.Drawing.Size(465, 26);
             this.text_DSN.TabIndex = 7;
@@ -225,7 +231,7 @@ namespace ReportUT_
             // text_Report
             // 
             this.text_Report.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.text_Report.Location = new System.Drawing.Point(234, 90);
+            this.text_Report.Location = new System.Drawing.Point(234, 135);
             this.text_Report.Name = "text_Report";
             this.text_Report.Size = new System.Drawing.Size(465, 26);
             this.text_Report.TabIndex = 6;
@@ -233,7 +239,7 @@ namespace ReportUT_
             // text_Sample
             // 
             this.text_Sample.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.text_Sample.Location = new System.Drawing.Point(234, 131);
+            this.text_Sample.Location = new System.Drawing.Point(234, 176);
             this.text_Sample.Name = "text_Sample";
             this.text_Sample.Size = new System.Drawing.Size(465, 26);
             this.text_Sample.TabIndex = 5;
@@ -244,7 +250,7 @@ namespace ReportUT_
             // 
             this.label4.AutoSize = true;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label4.Location = new System.Drawing.Point(31, 136);
+            this.label4.Location = new System.Drawing.Point(31, 181);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(153, 18);
             this.label4.TabIndex = 4;
@@ -253,7 +259,7 @@ namespace ReportUT_
             // text_Room
             // 
             this.text_Room.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.text_Room.Location = new System.Drawing.Point(234, 8);
+            this.text_Room.Location = new System.Drawing.Point(235, 14);
             this.text_Room.Name = "text_Room";
             this.text_Room.Size = new System.Drawing.Size(465, 26);
             this.text_Room.TabIndex = 3;
@@ -262,7 +268,7 @@ namespace ReportUT_
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label3.Location = new System.Drawing.Point(31, 95);
+            this.label3.Location = new System.Drawing.Point(31, 140);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(147, 18);
             this.label3.TabIndex = 2;
@@ -272,7 +278,7 @@ namespace ReportUT_
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label2.Location = new System.Drawing.Point(31, 53);
+            this.label2.Location = new System.Drawing.Point(31, 98);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(197, 18);
             this.label2.TabIndex = 1;
@@ -282,7 +288,7 @@ namespace ReportUT_
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label1.Location = new System.Drawing.Point(31, 12);
+            this.label1.Location = new System.Drawing.Point(32, 18);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(176, 18);
             this.label1.TabIndex = 0;
@@ -372,7 +378,7 @@ namespace ReportUT_
             this.panel4.Controls.Add(this.label_Count);
             this.panel4.Controls.Add(this.Button_Exec_Report);
             this.panel4.Controls.Add(this.Button_Settings);
-            this.panel4.Location = new System.Drawing.Point(3, 365);
+            this.panel4.Location = new System.Drawing.Point(3, 403);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(779, 61);
             this.panel4.TabIndex = 21;
@@ -449,8 +455,38 @@ namespace ReportUT_
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(784, 449);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(784, 487);
             this.tableLayoutPanel1.TabIndex = 22;
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(707, 57);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(50, 20);
+            this.checkBox4.TabIndex = 13;
+            this.checkBox4.Text = "Вкл";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            // 
+            // text_Date_POV
+            // 
+            this.text_Date_POV.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.text_Date_POV.Location = new System.Drawing.Point(236, 53);
+            this.text_Date_POV.Name = "text_Date_POV";
+            this.text_Date_POV.Size = new System.Drawing.Size(463, 26);
+            this.text_Date_POV.TabIndex = 12;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label8.Location = new System.Drawing.Point(31, 56);
+            this.label8.MaximumSize = new System.Drawing.Size(180, 20);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(179, 20);
+            this.label8.TabIndex = 11;
+            this.label8.Text = "Дата след. поверки                               ";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // Form1
             // 
@@ -459,7 +495,7 @@ namespace ReportUT_
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.ClientSize = new System.Drawing.Size(784, 457);
+            this.ClientSize = new System.Drawing.Size(784, 501);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.progressBar1);
             this.DoubleBuffered = true;
@@ -520,6 +556,9 @@ namespace ReportUT_
         private System.Windows.Forms.CheckBox checkBox1;
         private System.Windows.Forms.CheckBox checkBox3;
         private System.Windows.Forms.Label label_Count;
+        private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.TextBox text_Date_POV;
+        private System.Windows.Forms.Label label8;
     }
 }
 

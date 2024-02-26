@@ -430,6 +430,7 @@ if (k==0)                   return;
             SavePredator.SavePredator SP = new SavePredator.SavePredator();
             SP.Load(pl.Sample);
             var BM = SP.Bookmarks;
+            if (checkBox4.Checked == true) SP.BM_Insert_Str("Time_Pov", pl.Date_POV);
             if (checkBox3.Checked == true) SP.BM_Insert_Str("zona", pl.Room);
             else
                 SP.BM_Insert_Str("zona", sensors[num].Zone);
@@ -466,7 +467,14 @@ if (k==0)                   return;
                 Directory.CreateDirectory(path);
             }
 
-            string doc_name = sensors[num].sType + " " + sensors[num].Name + HH_mm + ".docx";    ///UniTesS THB - 1С 170434 
+            string Sens_name = sensors[num].Name;
+          //  Sens_name = "test.//\\";
+            Sens_name = Sens_name.Replace(".", "_");
+            Sens_name = Sens_name.Replace(",", "_");
+            Sens_name = Sens_name.Replace("/", "");
+            Sens_name = Sens_name.Replace("\\", "");
+
+            string doc_name = sensors[num].sType + " " + Sens_name + HH_mm + ".docx";    ///UniTesS THB - 1С 170434 
             string S = path + "\\" + doc_name;
             SP.Save(S);
         }
@@ -502,6 +510,7 @@ if (k==0)                   return;
                 pl.DSN = text_DSN.Text;
                 pl.Report = text_Report.Text;
                 pl.Sample = text_Sample.Text;
+                pl.Date_POV = text_Date_POV.Text;
 
             }
             Stream stmSaveWrite = new FileStream(Path_ini, FileMode.Create, FileAccess.Write, FileShare.None);
@@ -547,8 +556,9 @@ if (k==0)                   return;
                 text_DSN.Text = pl.DSN;
                 text_Report.Text = pl.Report;
                 text_Sample.Text = pl.Sample;
+                text_Date_POV.Text = pl.Date_POV;
                 stmSaveRead.Close();
-
+                 
                 if (bError)
                 {
                     MessageBox.Show("Error reading AmbientRepService.dat");
@@ -664,6 +674,10 @@ if (k==0)                   return;
             }
         }
 
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 
 

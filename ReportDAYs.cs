@@ -92,6 +92,7 @@ namespace ReportUT_
         public string Hmin;
         public string Hmax;
         public string Zone;
+        public string Time_Pov;
 
     }
     public class SensorMes
@@ -500,6 +501,7 @@ namespace ReportUT_
                 for (int i = 0; i < Cnt; i++)
                 {
                     sensors[i].Zone = Get_RoomSensorId(sensors[i].Id);
+                     
                 }
                 this.CloseConnection();
                 return;

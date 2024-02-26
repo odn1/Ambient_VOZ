@@ -456,6 +456,7 @@ if (k==0)                   return;
 
             SP.BM_Delete_Last_Row(new String[] { "HUM_TABLE" });
 
+           String Sg = RepDAYs.dateT1.ToString();
 
             string path = text_Report.Text; //+ @"{text_Report.Text}\\Отчеты\\{RepDAYs.dateT1.Year}\\{self.month_str}";
             path = path + "\\Отчеты\\" + RepDAYs.dateT1.Year.ToString() + "\\"
@@ -468,7 +469,7 @@ if (k==0)                   return;
             }
 
             string Sens_name = sensors[num].Name;
-          //  Sens_name = "test.//\\";
+            //  Sens_name = "test.//\\";
             Sens_name = Sens_name.Replace(".", "_");
             Sens_name = Sens_name.Replace(",", "_");
             Sens_name = Sens_name.Replace("/", "");

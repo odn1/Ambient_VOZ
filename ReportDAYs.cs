@@ -376,6 +376,9 @@ namespace ReportUT_
                 OdbcConnector ODC = new OdbcConnector(DSN_Str);
                 // _sensors = new List<Sensor>();
 
+
+              
+
                 ODC.OpenConnection();
                 Sn = ODC.Get_DAY_MeasSensorId(LSM, id, Time1, Time2, NumOperation);
                 ODC.CloseConnection();
@@ -451,6 +454,12 @@ namespace ReportUT_
 
             try
             {
+                Time1 = Time1.Replace("-", ".");
+                Time1 = Time1.Replace("/", ".");
+
+                Time2 = Time2.Replace("-", ".");
+                Time2 = Time2.Replace("/", ".");
+
                 this.OpenConnection();
                 OdbcCommand command = connection.CreateCommand();
                 command.CommandTimeout = 0;

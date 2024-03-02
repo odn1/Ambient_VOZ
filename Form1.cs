@@ -194,13 +194,13 @@ namespace ReportUT_
 
             if (!Directory.Exists(text_Report.Text) )
                 {
-                MessageBox.Show("Нет каталога для вывода отчетов:" + text_Report.Text, "Ошибка");
+                MessageBox.Show("Не найден каталог для вывода отчетов", "Ошибка");
                 panel2.Visible = true;
                 return;
             }
             if (!File.Exists(text_Sample.Text))
             {
-                MessageBox.Show("Нет файла   для шаблона:" + text_Sample.Text, "Ошибка");
+                MessageBox.Show("Файл-шаблон не найден по указанному пути", "Ошибка");
                 panel2.Visible = true;
                 return;
             }
@@ -470,12 +470,20 @@ if (k==0)                   return;
 
             string Sens_name = sensors[num].Name;
             //  Sens_name = "test.//\\";
-            Sens_name = Sens_name.Replace(".", "_");
-            Sens_name = Sens_name.Replace(",", "_");
-            Sens_name = Sens_name.Replace("/", "");
-            Sens_name = Sens_name.Replace("\\", "");
+            Sens_name = Sens_name.Replace(":", "_");
+            Sens_name = Sens_name.Replace(";", "_");
+            Sens_name = Sens_name.Replace("/", "_");
+            Sens_name = Sens_name.Replace("\"", "_");
+            Sens_name = Sens_name.Replace("*", "_");
+            Sens_name = Sens_name.Replace("?", "_");
+            Sens_name = Sens_name.Replace("|", "_");
+            Sens_name = Sens_name.Replace("«", "_");
+            Sens_name = Sens_name.Replace(">", "_");
+            Sens_name = Sens_name.Replace("<", "_");
+            Sens_name = Sens_name.Replace("\\", "_");
+               
 
-            string doc_name = sensors[num].sType + " " + Sens_name + HH_mm + ".docx";    ///UniTesS THB - 1С 170434 
+            string doc_name = sensors[num].sType + "_" + Sens_name + "_" + sensors[num].UID + "_" + HH_mm + ".docx";    ///UniTesS THB - 1С 170434 
             string S = path + "\\" + doc_name;
             SP.Save(S);
         }
@@ -512,6 +520,8 @@ if (k==0)                   return;
                 pl.Report = text_Report.Text;
                 pl.Sample = text_Sample.Text;
                 pl.Date_POV = text_Date_POV.Text;
+                pl.Date_POV_check = checkBox4.Checked;
+                pl.Room_check = checkBox3.Checked;
 
             }
             Stream stmSaveWrite = new FileStream(Path_ini, FileMode.Create, FileAccess.Write, FileShare.None);
@@ -558,6 +568,9 @@ if (k==0)                   return;
                 text_Report.Text = pl.Report;
                 text_Sample.Text = pl.Sample;
                 text_Date_POV.Text = pl.Date_POV;
+                checkBox3.Checked= pl.Room_check;
+                checkBox4.Checked = pl.Date_POV_check;
+
                 stmSaveRead.Close();
                  
                 if (bError)

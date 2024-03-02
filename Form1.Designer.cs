@@ -44,6 +44,9 @@ namespace ReportUT_
             this.dateTimePicker_Start_Time = new System.Windows.Forms.DateTimePicker();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.text_Date_POV = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.checkBox3 = new System.Windows.Forms.CheckBox();
             this.Button_Sample = new MaterialSkin.Controls.MaterialButton();
             this.Button_Reports = new MaterialSkin.Controls.MaterialButton();
@@ -68,9 +71,6 @@ namespace ReportUT_
             this.Button_Exec_Report = new MaterialSkin.Controls.MaterialButton();
             this.Button_Settings = new MaterialSkin.Controls.MaterialButton();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.checkBox4 = new System.Windows.Forms.CheckBox();
-            this.text_Date_POV = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -166,6 +166,36 @@ namespace ReportUT_
             this.panel2.Size = new System.Drawing.Size(779, 216);
             this.panel2.TabIndex = 19;
             this.panel2.Visible = false;
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(707, 57);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(50, 20);
+            this.checkBox4.TabIndex = 13;
+            this.checkBox4.Text = "Вкл";
+            this.checkBox4.UseVisualStyleBackColor = true;
+            // 
+            // text_Date_POV
+            // 
+            this.text_Date_POV.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.text_Date_POV.Location = new System.Drawing.Point(236, 53);
+            this.text_Date_POV.Name = "text_Date_POV";
+            this.text_Date_POV.Size = new System.Drawing.Size(465, 26);
+            this.text_Date_POV.TabIndex = 12;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label8.Location = new System.Drawing.Point(31, 56);
+            this.label8.MaximumSize = new System.Drawing.Size(180, 20);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(179, 20);
+            this.label8.TabIndex = 11;
+            this.label8.Text = "Дата след. поверки                               ";
+            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // checkBox3
             // 
@@ -457,36 +487,6 @@ namespace ReportUT_
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(784, 487);
             this.tableLayoutPanel1.TabIndex = 22;
-            // 
-            // checkBox4
-            // 
-            this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(707, 57);
-            this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(50, 20);
-            this.checkBox4.TabIndex = 13;
-            this.checkBox4.Text = "Вкл";
-            this.checkBox4.UseVisualStyleBackColor = true;
-            // 
-            // text_Date_POV
-            // 
-            this.text_Date_POV.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.text_Date_POV.Location = new System.Drawing.Point(236, 53);
-            this.text_Date_POV.Name = "text_Date_POV";
-            this.text_Date_POV.Size = new System.Drawing.Size(463, 26);
-            this.text_Date_POV.TabIndex = 12;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label8.Location = new System.Drawing.Point(31, 56);
-            this.label8.MaximumSize = new System.Drawing.Size(180, 20);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(179, 20);
-            this.label8.TabIndex = 11;
-            this.label8.Text = "Дата след. поверки                               ";
-            this.label8.Click += new System.EventHandler(this.label8_Click);
             // 
             // Form1
             // 

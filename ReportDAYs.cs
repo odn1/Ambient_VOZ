@@ -84,6 +84,7 @@ namespace ReportUT_
     public class Sensor
     {
         public int Id;
+        public string UID;
         public string Name;
         public int iType;
         public string sType;
@@ -155,7 +156,7 @@ namespace ReportUT_
         public int[] type_to_max_hum = { 90, 90, 90, 90, -1, -1 };
 
 
-        private static string SELECT_ALL_SENSORS = "SELECT  ID_SENS, SENS_NAME, SENS_TYPE FROM S_CONDITIONAL_SENSORS     order by  ID_SENS ";
+        private static string SELECT_ALL_SENSORS = "SELECT  ID_SENS, SENS_NAME, SENS_TYPE, SENS_UID FROM S_CONDITIONAL_SENSORS     order by  ID_SENS ";
         private static string SELECT_ROOM_SENSORS = "SELECT ROOM_NAME FROM S_AMBIENT_MAP_ICO WHERE ROOM_ID = (SELECT MAP_ID FROM S_AMBIENT_MAP_THB WHERE THB_ID= ";
         static string SELECT_ALL_SENSORS_MES = "select  tcon.tcon_time,  tcon.tcon_temp,  tcon.tcon_hum,  tcon.tcon_pres,  tcon.id_sens from i_test_conditions tcon where tcon.tcon_time >=";
 
@@ -434,6 +435,7 @@ namespace ReportUT_
                     sensor.Id = Convert.ToInt32(dataReader[0]);
                     sensor.Name = Convert.ToString(dataReader[1]);
                     sensor.iType = Convert.ToInt32(dataReader[2]);
+                    sensor.UID = Convert.ToString(dataReader[3]);
                     sensors.Add(sensor);
                 }
                 this.CloseConnection();

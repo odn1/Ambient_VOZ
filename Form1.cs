@@ -452,6 +452,9 @@ if (k==0)                   return;
                 SP.BM_Insert_Str("h_max", sensors[num].Hmax);
                 SP.BM_Insert_Line("HUM_TABLE", ListStr2);
             }
+            else
+                SP.BM_Delete("HUM");
+
             SP.BM_Insert_Line("HUM_TABLE", ListStr3);
 
             SP.BM_Delete_Last_Row(new String[] { "HUM_TABLE" });

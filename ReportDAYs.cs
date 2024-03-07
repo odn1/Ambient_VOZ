@@ -81,6 +81,8 @@ namespace ReportUT_
         }
     }
 
+
+
     public class Sensor
     {
         public int Id;
@@ -96,6 +98,13 @@ namespace ReportUT_
         public string Time_Pov;
 
     }
+
+    public class Sensor_UID_NAME
+    {
+        public string Mes_LOg;
+        public string Time;
+    }
+
     public class SensorMes
     {
         public int Id;  // проверка валидности -1000 - плохо
@@ -149,6 +158,8 @@ namespace ReportUT_
 
         List<Sensor> sensors = new List<Sensor>();
         List<string> StrListRoom = new List<string>();
+    
+        
 
         public int[] type_to_min_temp = { 0, 0, 0, 0, 0, -25 };
         public int[] type_to_max_temp = { 50, 50, 50, 50, 50, 50 };
@@ -159,6 +170,7 @@ namespace ReportUT_
         private static string SELECT_ALL_SENSORS = "SELECT  ID_SENS, SENS_NAME, SENS_TYPE, SENS_UID FROM S_CONDITIONAL_SENSORS     order by  ID_SENS ";
         private static string SELECT_ROOM_SENSORS = "SELECT ROOM_NAME FROM S_AMBIENT_MAP_ICO WHERE ROOM_ID = (SELECT MAP_ID FROM S_AMBIENT_MAP_THB WHERE THB_ID= ";
         static string SELECT_ALL_SENSORS_MES = "select  tcon.tcon_time,  tcon.tcon_temp,  tcon.tcon_hum,  tcon.tcon_pres,  tcon.id_sens from i_test_conditions tcon where tcon.tcon_time >=";
+        private static string SELECT_UID_SENSORS = "select LOG_TIME, LOG_TEXT from S_AMBIENT_LOG   order by  LOG_TIME ";
 
         public static OdbcConnection connection;
 
@@ -332,6 +344,64 @@ namespace ReportUT_
             }
         }
 
+
+
+        public List<Sensor_UID_NAME> Get_UID_NAME_Sensor()
+        {
+            string operationMessage = "AllSensors";
+            OdbcDataReader dataReader;
+            List<Sensor_UID_NAME> List_Sensor_UID_NAME1 = new List<Sensor_UID_NAME>();
+            try
+            {
+                this.OpenConnection();
+
+                if (connection.DataSource == "")
+                {
+                    // MessageBox.Show("нет подключения к БД. \nВ настройках проверьте Источник данных(DSN)", "Ошибка");
+                    F_DB = false;
+                    return List_Sensor_UID_NAME1;
+                }
+                OdbcCommand command = connection.CreateCommand();
+                command.CommandTimeout = 0;
+                command.CommandText = SELECT_UID_SENSORS;
+                System.Threading.Thread.Sleep(3000);
+
+                try
+                {
+                    dataReader = command.ExecuteReader();
+                }
+
+                catch (Exception exe)
+                {
+                    this.CloseConnection();
+                    Logger.GetInstanse().SetData(operationMessage, exe.Message);
+                    return List_Sensor_UID_NAME1;
+                }
+
+
+                List_Sensor_UID_NAME1.Clear();
+                while (dataReader.Read())
+                {
+                    Sensor_UID_NAME sensor_UID_NAME = new Sensor_UID_NAME();
+
+                    sensor_UID_NAME.Time = Convert.ToString(dataReader[0]);
+                    sensor_UID_NAME.Mes_LOg = Convert.ToString(dataReader[1]);
+                    List_Sensor_UID_NAME1.Add(sensor_UID_NAME);
+                }
+                this.CloseConnection();
+                return List_Sensor_UID_NAME1;
+            }
+
+            catch (InvalidCastException ex)
+            {
+                this.CloseConnection();
+                Logger.GetInstanse().SetData(operationMessage, ex.Message);
+                return List_Sensor_UID_NAME1;
+            }
+
+
+        }
+
         public string Get_RoomSensorId(int id)
         {
             string element = "";
@@ -376,9 +446,7 @@ namespace ReportUT_
             {
                 OdbcConnector ODC = new OdbcConnector(DSN_Str);
                 // _sensors = new List<Sensor>();
-
-
-              
+            
 
                 ODC.OpenConnection();
                 Sn = ODC.Get_DAY_MeasSensorId(LSM, id, Time1, Time2, NumOperation);

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 using System.Windows.Forms;
 using static System.Collections.Specialized.BitVector32;
+//using static System.Net.Mime.MediaTypeNames;
 
 namespace ReportUT_
 {
@@ -57,6 +58,8 @@ namespace ReportUT_
         public List<SensorMes> Listsensor_Mes = new List<SensorMes>();
 
         public SensorMes pSensorMes = new SensorMes();
+
+       public  List<Sensor_UID_NAME> List_Sensor_UID_NAME = new List<Sensor_UID_NAME>();
 
 
         public Form1()
@@ -266,7 +269,6 @@ namespace ReportUT_
                    }
 
 
-
                    for (int Moun_n = 0; Moun_n <= Moun; Moun_n++)
                    {
                        Listsensor_Mes = p_odbcConnector.AllSensors_Mes(RepDAYs.dateT1.ToString(), RepDAYs.dateT1.AddMonths(1).ToString());
@@ -316,6 +318,7 @@ namespace ReportUT_
                }
            });
             #endregion
+           
             progressBar1.Value = 1;
         }
 
@@ -694,6 +697,46 @@ if (k==0)                   return;
         private void label8_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void materialButton1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                p_odbcConnector = new OdbcConnector(pl.DSN);
+                p_odbcConnector.F_DB = true;
+
+                List_Sensor_UID_NAME = p_odbcConnector.Get_UID_NAME_Sensor();
+
+                List<String> Rez_Str = new List<string>();
+                for (int i = 0; i < List_Sensor_UID_NAME.Count; i++)
+                {
+                    if (List_Sensor_UID_NAME[i].Mes_LOg.Contains("UID:"))
+                        Rez_Str.Add(List_Sensor_UID_NAME[i].Mes_LOg);
+                }
+
+              //  char[] delimiterChars = { ' ', ',', '.', ':', '\n' };
+
+                string[] words = Rez_Str[0].Split(':');
+
+                String S  =""  ;
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Logger.GetInstanse().SetData("Get_UID_NAME_Sensor", ex.Message);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (p_odbcConnector!=null)
+            p_odbcConnector.CloseConnection();
         }
     }
 

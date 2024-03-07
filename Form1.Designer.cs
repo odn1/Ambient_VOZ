@@ -67,6 +67,7 @@ namespace ReportUT_
             this.dateTimePicker_2_Time = new System.Windows.Forms.DateTimePicker();
             this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
             this.panel4 = new System.Windows.Forms.Panel();
+            this.materialButton1 = new MaterialSkin.Controls.MaterialButton();
             this.label_Count = new System.Windows.Forms.Label();
             this.Button_Exec_Report = new MaterialSkin.Controls.MaterialButton();
             this.Button_Settings = new MaterialSkin.Controls.MaterialButton();
@@ -405,6 +406,7 @@ namespace ReportUT_
             // panel4
             // 
             this.panel4.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.panel4.Controls.Add(this.materialButton1);
             this.panel4.Controls.Add(this.label_Count);
             this.panel4.Controls.Add(this.Button_Exec_Report);
             this.panel4.Controls.Add(this.Button_Settings);
@@ -412,6 +414,27 @@ namespace ReportUT_
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(779, 61);
             this.panel4.TabIndex = 21;
+            // 
+            // materialButton1
+            // 
+            this.materialButton1.AutoSize = false;
+            this.materialButton1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.materialButton1.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.materialButton1.Depth = 0;
+            this.materialButton1.HighEmphasis = true;
+            this.materialButton1.Icon = null;
+            this.materialButton1.Location = new System.Drawing.Point(517, 6);
+            this.materialButton1.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.materialButton1.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialButton1.Name = "materialButton1";
+            this.materialButton1.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.materialButton1.Size = new System.Drawing.Size(184, 36);
+            this.materialButton1.TabIndex = 23;
+            this.materialButton1.Text = "История Имен(UID)";
+            this.materialButton1.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.materialButton1.UseAccentColor = false;
+            this.materialButton1.UseVisualStyleBackColor = true;
+            this.materialButton1.Click += new System.EventHandler(this.materialButton1_Click);
             // 
             // label_Count
             // 
@@ -509,6 +532,7 @@ namespace ReportUT_
             this.Text = "                                             Формирование Карты (журнала) учета т" +
     "емпературы и относительной влажности ";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -559,6 +583,7 @@ namespace ReportUT_
         private System.Windows.Forms.CheckBox checkBox4;
         private System.Windows.Forms.TextBox text_Date_POV;
         private System.Windows.Forms.Label label8;
+        private MaterialSkin.Controls.MaterialButton materialButton1;
     }
 }
 

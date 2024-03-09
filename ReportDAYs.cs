@@ -8,7 +8,7 @@ using IniParser;
 using IniParser.Model;
 using System.IO;
 using System.Windows;
-
+using System.Text.RegularExpressions;
 
 namespace ReportUT_
 {
@@ -101,9 +101,40 @@ namespace ReportUT_
 
     public class Sensor_UID_NAME
     {
-        public string Mes_LOg;
+       
         public string Time;
+        public string Mes_LOg;
+
+        public  void Check_UID_in_Mes (String S)
+        {
+             if (S == null)
+            {
+                Mes_LOg = GetTextBetween(S, "UID", " Период измерения");
+
+            }
+
+        }
+
+        public   String GetTextBetween(string text, string findText1, string findText2)
+        {
+     
+
+       
+            {
+                string[] splitArray = new string[2] { findText1, findText2 };//Add the two strings to an array to split across each string in the array
+                string[] substring = text.Split(splitArray, StringSplitOptions.None);//Get the substring
+                return substring[1];
+            }
+
+          
+        }
+
+
+
     }
+
+
+  
 
     public class SensorMes
     {

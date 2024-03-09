@@ -711,15 +711,21 @@ if (k==0)                   return;
                 List<String> Rez_Str = new List<string>();
                 for (int i = 0; i < List_Sensor_UID_NAME.Count; i++)
                 {
-                    if (List_Sensor_UID_NAME[i].Mes_LOg.Contains("UID:"))
-                        Rez_Str.Add(List_Sensor_UID_NAME[i].Mes_LOg);
+                      if (List_Sensor_UID_NAME[i].Mes_LOg.Contains("UID:"))
+                    {
+                       
+                       
+                        Rez_Str.Add(List_Sensor_UID_NAME[i].GetTextBetween(List_Sensor_UID_NAME[i].Mes_LOg, "UID:", "Период"));
+                    }
+;
+
                 }
 
               //  char[] delimiterChars = { ' ', ',', '.', ':', '\n' };
 
-                string[] words = Rez_Str[0].Split(':');
+               // string[] words = Rez_Str[0].Split(':',' ');
 
-                String S  =""  ;
+              //  String S  =""  ;
 
 
 

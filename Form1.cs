@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 using System.Windows.Forms;
 using static System.Collections.Specialized.BitVector32;
+//using static System.Net.Mime.MediaTypeNames;
 
 namespace ReportUT_
 {
@@ -57,6 +58,8 @@ namespace ReportUT_
         public List<SensorMes> Listsensor_Mes = new List<SensorMes>();
 
         public SensorMes pSensorMes = new SensorMes();
+
+       public  List<Sensor_UID_NAME> List_Sensor_UID_NAME = new List<Sensor_UID_NAME>();
 
 
         public Form1()
@@ -194,13 +197,13 @@ namespace ReportUT_
 
             if (!Directory.Exists(text_Report.Text) )
                 {
-                MessageBox.Show("Нет каталога для вывода отчетов:" + text_Report.Text, "Ошибка");
+                MessageBox.Show("Не найден каталог для вывода отчетов", "Ошибка");
                 panel2.Visible = true;
                 return;
             }
             if (!File.Exists(text_Sample.Text))
             {
-                MessageBox.Show("Нет файла   для шаблона:" + text_Sample.Text, "Ошибка");
+                MessageBox.Show("Файл-шаблон не найден по указанному пути", "Ошибка");
                 panel2.Visible = true;
                 return;
             }
@@ -266,7 +269,6 @@ namespace ReportUT_
                    }
 
 
-
                    for (int Moun_n = 0; Moun_n <= Moun; Moun_n++)
                    {
                        Listsensor_Mes = p_odbcConnector.AllSensors_Mes(RepDAYs.dateT1.ToString(), RepDAYs.dateT1.AddMonths(1).ToString());
@@ -316,6 +318,7 @@ namespace ReportUT_
                }
            });
             #endregion
+           
             progressBar1.Value = 1;
         }
 
@@ -430,6 +433,7 @@ if (k==0)                   return;
             SavePredator.SavePredator SP = new SavePredator.SavePredator();
             SP.Load(pl.Sample);
             var BM = SP.Bookmarks;
+            if (checkBox4.Checked == true) SP.BM_Insert_Str("Time_Pov", pl.Date_POV);
             if (checkBox3.Checked == true) SP.BM_Insert_Str("zona", pl.Room);
             else
                 SP.BM_Insert_Str("zona", sensors[num].Zone);
@@ -451,10 +455,14 @@ if (k==0)                   return;
                 SP.BM_Insert_Str("h_max", sensors[num].Hmax);
                 SP.BM_Insert_Line("HUM_TABLE", ListStr2);
             }
+            else
+                SP.BM_Delete("HUM");
+
             SP.BM_Insert_Line("HUM_TABLE", ListStr3);
 
             SP.BM_Delete_Last_Row(new String[] { "HUM_TABLE" });
 
+           String Sg = RepDAYs.dateT1.ToString();
 
             string path = text_Report.Text; //+ @"{text_Report.Text}\\Отчеты\\{RepDAYs.dateT1.Year}\\{self.month_str}";
             path = path + "\\Отчеты\\" + RepDAYs.dateT1.Year.ToString() + "\\"
@@ -466,7 +474,22 @@ if (k==0)                   return;
                 Directory.CreateDirectory(path);
             }
 
-            string doc_name = sensors[num].sType + " " + sensors[num].Name + HH_mm + ".docx";    ///UniTesS THB - 1С 170434 
+            string Sens_name = sensors[num].Name;
+            //  Sens_name = "test.//\\";
+            Sens_name = Sens_name.Replace(":", "_");
+            Sens_name = Sens_name.Replace(";", "_");
+            Sens_name = Sens_name.Replace("/", "_");
+            Sens_name = Sens_name.Replace("\"", "_");
+            Sens_name = Sens_name.Replace("*", "_");
+            Sens_name = Sens_name.Replace("?", "_");
+            Sens_name = Sens_name.Replace("|", "_");
+            Sens_name = Sens_name.Replace("«", "_");
+            Sens_name = Sens_name.Replace(">", "_");
+            Sens_name = Sens_name.Replace("<", "_");
+            Sens_name = Sens_name.Replace("\\", "_");
+               
+
+            string doc_name = sensors[num].sType + "_" + Sens_name + "_" + sensors[num].UID + "_" + HH_mm + ".docx";    ///UniTesS THB - 1С 170434 
             string S = path + "\\" + doc_name;
             SP.Save(S);
         }
@@ -502,6 +525,9 @@ if (k==0)                   return;
                 pl.DSN = text_DSN.Text;
                 pl.Report = text_Report.Text;
                 pl.Sample = text_Sample.Text;
+                pl.Date_POV = text_Date_POV.Text;
+                pl.Date_POV_check = checkBox4.Checked;
+                pl.Room_check = checkBox3.Checked;
 
             }
             Stream stmSaveWrite = new FileStream(Path_ini, FileMode.Create, FileAccess.Write, FileShare.None);
@@ -547,8 +573,12 @@ if (k==0)                   return;
                 text_DSN.Text = pl.DSN;
                 text_Report.Text = pl.Report;
                 text_Sample.Text = pl.Sample;
-                stmSaveRead.Close();
+                text_Date_POV.Text = pl.Date_POV;
+                checkBox3.Checked= pl.Room_check;
+                checkBox4.Checked = pl.Date_POV_check;
 
+                stmSaveRead.Close();
+                 
                 if (bError)
                 {
                     MessageBox.Show("Error reading AmbientRepService.dat");
@@ -664,6 +694,50 @@ if (k==0)                   return;
             }
         }
 
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void materialButton1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                p_odbcConnector = new OdbcConnector(pl.DSN);
+                p_odbcConnector.F_DB = true;
+
+                List_Sensor_UID_NAME = p_odbcConnector.Get_UID_NAME_Sensor();
+
+                List<String> Rez_Str = new List<string>();
+                for (int i = 0; i < List_Sensor_UID_NAME.Count; i++)
+                {
+                    if (List_Sensor_UID_NAME[i].Mes_LOg.Contains("UID:"))
+                        Rez_Str.Add(List_Sensor_UID_NAME[i].Mes_LOg);
+                }
+
+              //  char[] delimiterChars = { ' ', ',', '.', ':', '\n' };
+
+                string[] words = Rez_Str[0].Split(':');
+
+                String S  =""  ;
+
+
+
+
+            }
+            catch (Exception ex)
+            {
+                Logger.GetInstanse().SetData("Get_UID_NAME_Sensor", ex.Message);
+                MessageBox.Show(ex.Message);
+                return;
+            }
+        }
+
+        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (p_odbcConnector!=null)
+            p_odbcConnector.CloseConnection();
+        }
     }
 
 

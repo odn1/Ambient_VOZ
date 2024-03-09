@@ -721,12 +721,14 @@ if (k==0)                   return;
 
                 }
 
-              //  char[] delimiterChars = { ' ', ',', '.', ':', '\n' };
-
-               // string[] words = Rez_Str[0].Split(':',' ');
-
-              //  String S  =""  ;
-
+                List<String> myStringList = new List<string>();
+                foreach (string s in Rez_Str)
+                {
+                    if (!myStringList.Contains(s))
+                    {
+                        myStringList.Add(s);
+                    }
+                }
 
 
 

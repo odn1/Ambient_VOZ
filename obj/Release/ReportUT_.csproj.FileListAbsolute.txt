@@ -1,0 +1,17 @@
+E:\2023\Ambient\VOZ_1\Ambient_VOZ\bin\Release\ReportUT_.exe.config
+E:\2023\Ambient\VOZ_1\Ambient_VOZ\bin\Release\ReportUT_.exe
+E:\2023\Ambient\VOZ_1\Ambient_VOZ\bin\Release\ReportUT_.pdb
+E:\2023\Ambient\VOZ_1\Ambient_VOZ\bin\Release\INIFileParser.dll
+E:\2023\Ambient\VOZ_1\Ambient_VOZ\bin\Release\MaterialSkin.dll
+E:\2023\Ambient\VOZ_1\Ambient_VOZ\bin\Release\SavePredator.dll
+E:\2023\Ambient\VOZ_1\Ambient_VOZ\bin\Release\Xceed.Document.NET.dll
+E:\2023\Ambient\VOZ_1\Ambient_VOZ\bin\Release\Xceed.Words.NET.dll
+E:\2023\Ambient\VOZ_1\Ambient_VOZ\obj\Release\ReportUT_.csproj.AssemblyReference.cache
+E:\2023\Ambient\VOZ_1\Ambient_VOZ\obj\Release\ReportUT_.Form1.resources
+E:\2023\Ambient\VOZ_1\Ambient_VOZ\obj\Release\ReportUT_.Properties.Resources.resources
+E:\2023\Ambient\VOZ_1\Ambient_VOZ\obj\Release\ReportUT_.csproj.GenerateResource.cache
+E:\2023\Ambient\VOZ_1\Ambient_VOZ\obj\Release\ReportUT_.csproj.CoreCompileInputs.cache
+E:\2023\Ambient\VOZ_1\Ambient_VOZ\obj\Release\ReportUT_.csproj.CopyComplete
+E:\2023\Ambient\VOZ_1\Ambient_VOZ\obj\Release\ReportUT_.exe
+E:\2023\Ambient\VOZ_1\Ambient_VOZ\obj\Release\ReportUT_.pdb
+E:\2023\Ambient\VOZ_1\Ambient_VOZ\obj\Release\ReportUT_.Ошибка.resources

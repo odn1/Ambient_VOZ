@@ -1,0 +1,64 @@
+public class ReportingEngineTests
+    {
+        private string templatePath = @"..\..\..\template.docx";
+        private string reportPath = @"..\..\..\report.docx";
+
+        [TestMethod]
+        public void Load_ValidFile_ShouldLoadSuccessfully()
+        {
+            var engine = new ReportingEngine();
+            engine.Load(templatePath);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FileNotFoundException))]
+        public void Load_InvalidFileName_ShouldThrowException()
+        {
+            var engine = new ReportingEngine();
+            engine.Load("fake name");
+        }
+
+        [TestMethod]
+        public void Save_ValidFile_ShouldSaveSuccessfully()
+        {
+            var engine = new ReportingEngine();
+            engine.Load(templatePath);
+            engine.Save(reportPath);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void Save_IvalidFileName_ShouldThrowException()
+        {
+            var engine = new ReportingEngine();
+            engine.Load(templatePath);
+            engine.Save(@"?");
+        }
+
+        [TestMethod]
+        public void Delete_BookMarks()
+        {
+            var engine = new ReportingEngine();
+            engine.Load(templatePath);
+            String[] bookmarks = engine.Bookmarks;
+            engine.BM_Delete(bookmarks);
+            engine.Save(@"..\..\..\report2.docx");
+        }
+
+        public void Delete_Bookmark_In_Bookmark()
+        {
+            var engine = new ReportingEngine();
+            engine.Load(templatePath);
+            engine.BM_Delete(new string[] { "big_bm", "little_bm" });
+            engine.Save(reportPath);
+        }
+
+        [TestMethod]
+        public void Insert_String_In_Bookmark()
+        {
+            var engine = new ReportingEngine();
+            engine.Load(templatePath);
+            engine.BM_Insert_Str("little_bm", "test");
+            engine.Save(reportPath);
+        }
+    }

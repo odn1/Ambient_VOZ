@@ -438,7 +438,7 @@ if (k==0)                   return;
             SP.BM_Insert_Str("t_min", sensors[num].Tmin);
             SP.BM_Insert_Str("t_max", sensors[num].Tmax);
  
-            SP.BM_Insert_Str("sens_name", sensors[num].sType + " " + sensors[num].Name);
+            SP.BM_Insert_Str("sens_name", sensors[num].sType + " " + sensors[num].Name+ " ("  + sensors[num].UID + ")");
             SP.BM_Insert_Str("data_meas", RepDAYs.dateT1.ToString("MMMM, yyyy"));
 
             SP.BM_Insert_Line("HUM_TABLE", ListStr);

@@ -172,7 +172,7 @@ namespace ReportUT_
             this.checkBox4.AutoSize = true;
             this.checkBox4.Location = new System.Drawing.Point(707, 57);
             this.checkBox4.Name = "checkBox4";
-            this.checkBox4.Size = new System.Drawing.Size(50, 20);
+            this.checkBox4.Size = new System.Drawing.Size(51, 20);
             this.checkBox4.TabIndex = 13;
             this.checkBox4.Text = "Вкл";
             this.checkBox4.UseVisualStyleBackColor = true;
@@ -202,7 +202,7 @@ namespace ReportUT_
             this.checkBox3.AutoSize = true;
             this.checkBox3.Location = new System.Drawing.Point(708, 18);
             this.checkBox3.Name = "checkBox3";
-            this.checkBox3.Size = new System.Drawing.Size(50, 20);
+            this.checkBox3.Size = new System.Drawing.Size(51, 20);
             this.checkBox3.TabIndex = 10;
             this.checkBox3.Text = "Вкл";
             this.checkBox3.UseVisualStyleBackColor = true;
@@ -273,8 +273,8 @@ namespace ReportUT_
             this.text_Sample.Name = "text_Sample";
             this.text_Sample.Size = new System.Drawing.Size(465, 26);
             this.text_Sample.TabIndex = 5;
-            this.text_Sample.Text = "C:\\Program Files (x86)\\Ambient Viewer\\ReportGen\\карта_температуры_и_влажности_Юни" +
-    "тесс.docx";
+            this.text_Sample.Text = "C:\\UnitessApp\\Ambient Viewer\\ReportGen\\карта_температуры_и_влажности_Юнитесс.docx" +
+    "";
             // 
             // label4
             // 

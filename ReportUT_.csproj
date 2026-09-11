@@ -7,8 +7,8 @@
     <ProjectGuid>{2208C560-9143-4CCE-8591-47C585B2E840}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>ReportUT_</RootNamespace>
-    <AssemblyName>ReportUT_</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <AssemblyName>ReportUID_NAME</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <PublishUrl>publish\</PublishUrl>
@@ -50,7 +50,13 @@
   <PropertyGroup>
     <ApplicationIcon>AmbientIco.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>ReportUT_.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus">
+      <HintPath>..\..\..\..\WORK\2024\ECXEL\3\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="INIFileParser, Version=2.5.2.0, Culture=neutral, PublicKeyToken=79af7b307b65cf3c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>packages\INIFileParser.dll</HintPath>
@@ -106,20 +112,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReportDAYs.cs" />
-    <Compile Include="src\controllers\EmailController.cs" />
-    <Compile Include="src\controllers\impls\SensorControllerImpl.cs" />
-    <Compile Include="src\controllers\ISensorController.cs" />
-    <Compile Include="src\IniReader.cs" />
-    <Compile Include="src\models\MeasurementConverter.cs" />
-    <Compile Include="src\models\MeasurementData.cs" />
-    <Compile Include="src\models\OutBoundEnum.cs" />
-    <Compile Include="src\models\Sensor.cs" />
-    <Compile Include="src\models\SensorConverter.cs" />
-    <Compile Include="src\services\IConnector.cs" />
-    <Compile Include="src\services\impls\OdbcConnector.cs" />
-    <Compile Include="src\utils\EnumOutState.cs" />
-    <Compile Include="src\utils\EventCollection.cs" />
-    <Compile Include="src\utils\Logger.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>

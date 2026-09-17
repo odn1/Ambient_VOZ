@@ -101,14 +101,17 @@ namespace ReportUT_
         public int Id;  // проверка валидности -1000 - плохо
         public DateTime TimeS;
         private float temperature;
+        public int iType;
         public float Temperature
         {
             set
             {
                 temperature = value == -127.0 || value == 127.0 ? float.NaN : value;
+            //    temperature = value == -128.0 || value == 128.0 ? float.NaN : value;
             }
             get
             {
+                if (iType == 162) temperature = humidity;
                 return temperature;
             }
         }
@@ -119,6 +122,7 @@ namespace ReportUT_
             set
             {
                 humidity = value == -127.0 || value == 127.0 ? float.NaN : value;
+        //        temperature = value == -128.0 || value == 128.0 ? float.NaN : value;
             }
             get
             {
@@ -132,6 +136,7 @@ namespace ReportUT_
             set
             {
                 pressure = value == -127.0 || value == 127.0 ? float.NaN : value;
+    //            temperature = value == -128.0 || value == 128.0 ? float.NaN : value;
             }
             get
             {
@@ -148,12 +153,14 @@ namespace ReportUT_
         private List<SensorMes> _sensorsMes = new List<SensorMes>();
 
         List<Sensor> sensors = new List<Sensor>();
+        List<Sensor> sensorsTHB3 = new List<Sensor>();
+
         List<string> StrListRoom = new List<string>();
 
-        public int[] type_to_min_temp = { 0, 0, 0, 0, 0, -25 };
-        public int[] type_to_max_temp = { 50, 50, 50, 50, 50, 50 };
-        public int[] type_to_min_hum = { 10, 10, 10, 10, -1, -1 };
-        public int[] type_to_max_hum = { 90, 90, 90, 90, -1, -1 };
+        public int[] type_to_min_temp = { 0, 0, 0, 0, 0, -25,-40 };
+        public int[] type_to_max_temp = { 50, 50, 50, 50, 50, 50,50 };
+        public int[] type_to_min_hum = { 10, 10, 10, 10, -1, -1 ,-80};
+        public int[] type_to_max_hum = { 90, 90, 90, 90, -1, -1 ,90};
 
 
         private static string SELECT_ALL_SENSORS = "SELECT  ID_SENS, SENS_NAME, SENS_TYPE, SENS_UID FROM S_CONDITIONAL_SENSORS     order by  ID_SENS ";
@@ -174,9 +181,6 @@ namespace ReportUT_
         //    }
         //    Console.WriteLine("Подключение закрыто...");
         }
-
-
-
 
         public OdbcConnector(string DSN_Str)
         {
@@ -299,11 +303,20 @@ namespace ReportUT_
                    // sensors[i].Hmax = type_to_max_hum[5].ToString("0.0");
                    // sensors[i].Hmin = type_to_min_hum[5].ToString("0.0");
                     break;
-
+                case (161):
+                    sensors[i].sType = "UniTesS THB-3";
+                    sensors[i].Tmax = type_to_max_temp[6].ToString("0.0");
+                    sensors[i].Tmin = type_to_min_temp[6].ToString("0.0");
+                    break;
+                case (162):
+                    sensors[i].sType = "UniTesS THB-3";
+                    sensors[i].Tmax = type_to_max_hum[6].ToString("0.0");
+                    sensors[i].Tmin = type_to_min_hum[6].ToString("0.0");
+                    break;
             }
         }
 
-        public SensorMes Get_DAY_MeasSensorId(List<SensorMes> Listsensor_Mes, int id, string Time1, 
+        public SensorMes Get_DAY_MeasSensorId(List<SensorMes> Listsensor_Mes, int id, int iType , string Time1, 
             string Time2, int NumOperation)
         {
             SensorMes element = new SensorMes();
@@ -322,6 +335,8 @@ namespace ReportUT_
                 element = new SensorMes();
                 element = Listsensor_Mes.Where(w => w.Id == id).FirstOrDefault(p => p.TimeS > DateTime.Parse(Time1)
                 && p.TimeS < D2);
+                if (element != null) element.iType = iType;
+                  //  MessageBox.Show(element.ToString());
                 return element;
             }
             catch (Exception ex)
@@ -367,7 +382,7 @@ namespace ReportUT_
         /// <param name="Time2"> too times for one month</param>
         /// <param name="NumOperation">  0 - only Time1; 1 - Time1,2; 3 - Month 1,2 ;</param>
         /// <returns></returns>
-        public SensorMes OneSensor(List<SensorMes> LSM, int id, string Time1, string Time2, int NumOperation, string DSN_Str)
+        public SensorMes OneSensor(List<SensorMes> LSM, int id, int iType, string Time1, string Time2, int NumOperation, string DSN_Str)
         {
 
             SensorMes Sn = new SensorMes();
@@ -381,7 +396,7 @@ namespace ReportUT_
               
 
                 ODC.OpenConnection();
-                Sn = ODC.Get_DAY_MeasSensorId(LSM, id, Time1, Time2, NumOperation);
+                Sn = ODC.Get_DAY_MeasSensorId(LSM, id, iType, Time1, Time2, NumOperation);
                 ODC.CloseConnection();
                 return Sn;
             }
@@ -439,6 +454,8 @@ namespace ReportUT_
                     sensors.Add(sensor);
                 }
                 this.CloseConnection();
+
+                AllSensors_THB3();
                 return sensors;
             }
 
@@ -447,6 +464,63 @@ namespace ReportUT_
                 this.CloseConnection();
                 Logger.GetInstanse().SetData(operationMessage, ex.Message);
                 return sensors;
+            }
+        }
+
+        public List<Sensor> AllSensors_THB3()
+        {
+            string operationMessage = "AllSensors_THB3";
+            try
+            {
+                sensorsTHB3.Clear();
+             
+                for (int i = 0; i < sensors.Count;i++)
+                {
+                    if (sensors[i].iType == 16)
+                    {
+                        Sensor sensor = new Sensor();
+                        sensor.Id = sensors[i].Id;
+                        sensor.Name = sensors[i].Name + " канал 1 ";
+                        sensor.iType = 161;
+                        sensor.UID = sensors[i].UID;
+                        sensorsTHB3.Add(sensor);
+                        Sensor sensor1 = new Sensor();
+                        sensor1.Id = sensors[i].Id;
+                        sensor1.Name = sensors[i].Name + " канал 2 ";
+                        sensor1.iType = 162;
+                        sensor1.UID = sensors[i].UID;
+                        sensorsTHB3.Add(sensor1);
+                    }
+                    else
+                    {
+                        Sensor sensor = new Sensor();
+                        sensor.Id = sensors[i].Id;
+                        sensor.Name = sensors[i].Name;
+                        sensor.iType = sensors[i].iType;
+                        sensor.UID = sensors[i].UID;
+                        sensorsTHB3.Add(sensor);
+                    }
+
+                }
+                sensors.Clear();
+                for (int i = 0; i < sensorsTHB3.Count; i++)
+                {
+                    Sensor sensor = new Sensor();
+                    sensor.Id = sensorsTHB3[i].Id;
+                    sensor.Name = sensorsTHB3[i].Name;
+                    sensor.iType = sensorsTHB3[i].iType;
+                    sensor.UID = sensorsTHB3[i].UID;
+                    sensors.Add(sensor);
+                }
+
+                        return sensorsTHB3;
+            }
+
+            catch (InvalidCastException ex)
+            {
+                this.CloseConnection();
+                Logger.GetInstanse().SetData(operationMessage, ex.Message);
+                return sensorsTHB3;
             }
         }
 

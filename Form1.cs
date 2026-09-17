@@ -274,7 +274,7 @@ namespace ReportUT_
                        for (int sn_n = 0; sn_n < sensors.Count; sn_n++)
                        {
 
-                           One_Sens_Day(Listsensor_Mes, ListStr, ListStr1, ListStr2, ListStr3, sensors[sn_n].Id, sn_n, Moun_n);
+                           One_Sens_Day(Listsensor_Mes, ListStr, ListStr1, ListStr2, ListStr3, sensors[sn_n].Id, sensors[sn_n].iType, sn_n, Moun_n);
                            D_procent = D_procent + procent;
                            prc = (int)D_procent;
 
@@ -320,7 +320,7 @@ namespace ReportUT_
         }
 
 
-        private void One_Sens_Day(List<SensorMes> LSM, string[] ListStr, string[] ListStr1, string[] ListStr2, string[] ListStr3, int iDS, int numS, int Mountn)
+        private void One_Sens_Day(List<SensorMes> LSM, string[] ListStr, string[] ListStr1, string[] ListStr2, string[] ListStr3, int iDS, int iType, int numS, int Mountn)
         {
             DateTime dateTm = RepDAYs.dateT1;
             DateTime dateTm2;
@@ -337,7 +337,8 @@ namespace ReportUT_
                 for (int j = 1; j <= countDays; j++)
                 {
 
-                    pSensorMes = p_odbcConnector.OneSensor(LSM, iDS, dateTm.ToString(), dateTm.ToString(), 0, pl.DSN);
+                    pSensorMes = p_odbcConnector.OneSensor(LSM, iDS, iType, dateTm.ToString(), dateTm.ToString(), 0, pl.DSN);
+
 
 
                     if (pSensorMes != null)
@@ -346,7 +347,8 @@ namespace ReportUT_
                             ListStr[j] = pSensorMes.TimeS.ToString("HH:mm"); // ();  //   //
                             if (float.IsNaN(pSensorMes.Temperature))
                             ListStr1[j] = "N/A";
-                           else 
+                            if (pSensorMes.Temperature==-128) ListStr1[j] = "откл";
+                            else 
                                 ListStr1[j] = pSensorMes.Temperature.ToString("0.0");
 
                             if (float.IsNaN(pSensorMes.Humidity))
@@ -380,7 +382,7 @@ namespace ReportUT_
 
                         for (int j = 1; j <= countDays; j++)
                         {
-                            pSensorMes = p_odbcConnector.OneSensor(Listsensor_Mes, iDS, dateTm2.ToString(), dateTm2.ToString(), 0, pl.DSN);
+                            pSensorMes = p_odbcConnector.OneSensor(Listsensor_Mes, iDS, iType, dateTm2.ToString(), dateTm2.ToString(), 0, pl.DSN);
                             if (pSensorMes != null)
                                 if (pSensorMes.Id != -1000)
                                 {
@@ -446,14 +448,23 @@ if (k==0)                   return;
             SP.BM_Insert_Line("HUM_TABLE", ListStr1);
 
             // с влажностью
-            if (sensors[num].iType == 8 || sensors[num].iType == 6 || sensors[num].iType == 4 || sensors[num].iType == 2)
+            if (sensors[num].iType == 8 || sensors[num].iType == 6 || sensors[num].iType == 4 || sensors[num].iType == 2 )
             {
                 SP.BM_Insert_Str("h_min", sensors[num].Hmin);
                 SP.BM_Insert_Str("h_max", sensors[num].Hmax);
                 SP.BM_Insert_Line("HUM_TABLE", ListStr2);
-            }
+                }
             else
                 SP.BM_Delete("HUM");
+            //------------------------- THB3------------------
+            // с t in влажности
+            if (sensors[num].iType == 16)
+            {
+                SP.BM_Insert_Str("t_min", sensors[num].Hmin);
+                SP.BM_Insert_Str("t_max", sensors[num].Hmax);
+              //  SP.BM_Insert_Line("HUM_TABLE", ListStr2);
+            }
+            //--------------------------------------------------
 
             SP.BM_Insert_Line("HUM_TABLE", ListStr3);
 
